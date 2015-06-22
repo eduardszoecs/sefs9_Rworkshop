@@ -1,0 +1,54 @@
+\documentclass[10pt, compress]{beamer}
+
+\usetheme[usetotalslideindicator, usetitleprogressbar]{m}
+\title{A (brief) introduction to ordination and the vegan package}
+\date{SEFS9, July 5th 2015}
+\author{Eduard Szöcs}
+\institute{Institute for Environmental Sciences - University of Koblenz-Landau \\[1em] \includegraphics[width=2.5cm]{fig/Institut.png}}
+%%% ----------------------------------------------------------------------------
+
+
+\begin{document}
+\maketitle
+
+\begin{frame}
+\frametitle{}
+\end{frame}
+
+
+%%% ----------------------------------------------------------------------------
+\section{Datasets}
+\begin{frame}
+\frametitle{Salinization - River Werra}
+\end{frame}
+
+\begin{frame}
+\frametitle{Doubs river fish communities}
+\end{frame}
+
+
+%%% ----------------------------------------------------------------------------
+\section{Unconstrained Ordination}
+\begin{frame}
+\frametitle{Unconstrained Ordination}
+\begin{itemize}
+  \item Principal Components Analysis (PCA)
+  \item Nonmetric Multidimensional Scaling (NMDS)
+\end{itemize}
+\end{frame}
+
+
+%%% ----------------------------------------------------------------------------
+\section{Constrained Ordination}
+\begin{frame}
+\frametitle{Constrained Ordination}
+\begin{itemize}
+  \item Redundany analysis (RDA)
+  \item Transformation-based RDA
+  \item Distance-based RDA
+  \item Permutation Tests
+\end{itemize}
+\end{frame}
+
+%%% ----------------------------------------------------------------------------
+\end{document}

@@ -7,3 +7,12 @@ SEFS9_Geneva.Rproj
 
 # misc
 *.html
+
+# beamer
+*.log
+*.nav
+*.snm
+*.synctex.gz
+*.toc
+*cache
+*concordance.tex
