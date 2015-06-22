@@ -1,0 +1,9 @@
+.Rproj.user
+.Rhistory
+.RData
+
+# RStudio
+SEFS9_Geneva.Rproj
+
+# misc
+*.html
