@@ -1,14 +1,78 @@
-\documentclass[10pt, compress]{beamer}
+\documentclass[9pt, compress]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage{color}
 
-\usetheme[usetotalslideindicator, usetitleprogressbar]{m}
+
+%%% ----- Theme ----------------------------------------------------------------
+\usetheme{default}
+\useoutertheme[subsection=false]{miniframes}
+
+
+
+% move navigation to footer
+\setbeamertemplate{headline}{}
+\makeatletter
+\setbeamertemplate{footline}
+  {%
+  \begin{beamercolorbox}{section in head/foot}
+    \vskip2pt\insertnavigation{\paperwidth}\vskip5pt
+  \end{beamercolorbox}%
+  }
+\makeatother
+
+% no navigation bar
+\beamertemplatenavigationsymbolsempty
+
+% some colors
+\definecolor{foreground}{RGB}{0, 0, 0}
+\definecolor{background}{RGB}{255,255,255}
+\definecolor{title}{RGB}{77, 123, 150}
+\definecolor{gray}{RGB}{116,116,116}
+\definecolor{hilight}{RGB}{228, 97, 0}
+\setbeamercolor{section in head/foot}{fg = title}
+% set colors
+\setbeamercolor{titlelike}{fg=title}
+\setbeamercolor{subtitle}{fg=title}
+\setbeamercolor{institute}{fg=gray}
+\setbeamercolor{normal text}{fg=foreground,bg=background}
+% set colors for itemize
+\setbeamercolor{item}{fg=foreground} % color of bullets
+\setbeamercolor{subitem}{fg=gray}
+\setbeamercolor{itemize/enumerate subbody}{fg=gray}
+
+
+%%% ----- Metadata -------------------------------------------------------------
 \title{A (brief) introduction to ordination and the vegan package}
 \date{SEFS9, July 5th 2015}
 \author{Eduard Szöcs}
-\institute{Institute for Environmental Sciences - University of Koblenz-Landau \\[1em] \includegraphics[width=2.5cm]{fig/Institut.png}}
+\institute{Institute for Environmental Sciences - University of Koblenz-Landau \\[1em] 
+  \includegraphics[width=2.5cm]{fig/Institut.png}}
+
+
+
+%%% ----- Macros ---------------------------------------------------------------
+%%% Footnotetext without numbering
+\makeatletter
+\def\blfootnote{\gdef\@thefnmark{}\@footnotetext}
+\makeatother
+
+
+
+
+
+
 %%% ----------------------------------------------------------------------------
-
-
 \begin{document}
+<<r setup, echo = FALSE, results = 'hide', message = FALSE>>=
+knitr::opts_chunk$set(comment = NA, fig.align = "center",
+                      out.width = "0.7\\linewidth",
+                      echo = TRUE, message = TRUE, warning = TRUE,
+                      cache = TRUE, size = 'footnotesize'
+                      )
+knitr:::opts_knit$set(root.dir = '/home/edisz/Documents/Uni/Projects/PHD/CONFERENCES/SEFS9_Geneva/3-IntroVeganPackage/data/')
+@
+
+
 \maketitle
 
 \begin{frame}
@@ -18,17 +82,57 @@
 
 %%% ----------------------------------------------------------------------------
 \section{Datasets}
-\begin{frame}
-\frametitle{Salinization - River Werra}
+\begin{frame}[plain]{}
+\begin{center}
+  \Huge \color{title} Datasets
+\end{center}
 \end{frame}
 
+\subsection{}
 \begin{frame}
-\frametitle{Doubs river fish communities}
+\frametitle{Demonstration: Salinization and Pestices}
+
+\blfootnote{\color{gray} Szöcs, E., Kefford, B.J., Schäfer, R.B., 2012. Is there an interaction of the effects of salinity and pesticides on the community structure of macroinvertebrates? Science of the Total Environment 437, 121–126.}
 \end{frame}
+
+
+\begin{frame}
+\frametitle{Demonstration: Salinization and Pestices}
+<<r setwd, eval = FALSE>>=
+setwd('your/workingdirectory')
+@
+% setwd('/home/edisz/Documents/Uni/Projects/PHD/CONFERENCES/SEFS9_Geneva/3-IntroVeganPackage/data/')
+<<r load_data, eval = FALSE>>=
+abu <- read.table('melbourneAbu.csv', sep = ';')
+
+env <- read.table('melbourneEnv.csv', sep = ';')
+@
+
+<<r load_data2, echo = FALSE>>=
+setwd('/home/edisz/Documents/Uni/Projects/PHD/CONFERENCES/SEFS9_Geneva/3-IntroVeganPackage/data/')
+abu <- read.table('melbourneAbu.csv', sep = ';')
+env <- read.table('melbourneEnv.csv', sep = ';')
+@
+\end{frame}
+
+
+\subsection{}
+\begin{frame}
+\frametitle{Exercise: Doubs river fish communities}
+\end{frame}
+
 
 
 %%% ----------------------------------------------------------------------------
-\section{Unconstrained Ordination}
+\section{Constrained Ordination}
+\begin{frame}[plain]{}
+\begin{center}
+  \Huge \color{title} Unconstrained Ordination
+\end{center}
+\end{frame}
+
+
+\subsection{}
 \begin{frame}
 \frametitle{Unconstrained Ordination}
 \begin{itemize}
@@ -38,8 +142,31 @@
 \end{frame}
 
 
+
+\bgroup
+\setbeamercolor{background canvas}{bg=title}
+\begin{frame}[plain]{}
+\begin{center}
+  \color{background}
+  \Huge \textbf{Your turn}! \\[1em]
+  \large
+  Load the doubs data. \\
+  Is there a downstream gradient?
+\end{center}
+\end{frame}
+\egroup
+
+
 %%% ----------------------------------------------------------------------------
 \section{Constrained Ordination}
+\begin{frame}[plain]{}
+\begin{center}
+  \Huge \color{title} Constrained Ordination
+\end{center}
+\end{frame}
+
+
+\subsection{}
 \begin{frame}
 \frametitle{Constrained Ordination}
 \begin{itemize}
@@ -49,6 +176,40 @@
   \item Permutation Tests
 \end{itemize}
 \end{frame}
+
+\bgroup
+\setbeamercolor{background canvas}{bg=title}
+\begin{frame}[plain]{}
+\begin{center}
+  \color{background}
+  \Huge \textbf{Your turn}! \\[1em]
+  \large
+  Using the doubs data. \\
+\end{center}
+\end{frame}
+\egroup
+
+
+%%% ----------------------------------------------------------------------------
+\section{Permutation Tests}
+\begin{frame}[plain]{}
+\begin{center}
+  \Huge \color{title} Permutation Tests
+\end{center}
+\end{frame}
+
+
+\bgroup
+\setbeamercolor{background canvas}{bg=title}
+\begin{frame}[plain]{}
+\begin{center}
+  \color{background}
+  \Huge \textbf{Your turn}! \\[1em]
+  \large
+  Using the doubs data. \\
+\end{center}
+\end{frame}
+\egroup
 
 %%% ----------------------------------------------------------------------------
 \end{document}

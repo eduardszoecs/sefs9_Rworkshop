@@ -27,11 +27,10 @@ You can use the code editor of your choice. However, we recommend using [RStudio
 ### Installing packages
 
 Packages extend the basic functionality of R and add functions or datasets.
-For this course we need a few extra packages.  Please install the following packages - simply paste and run these commands in your R prompt :
+For this course we need a few extra packages.  Please install the following packages - simply paste and run this command in your R prompt :
 
 ```{R}
-install.packages("vegan", dependencies = TRUE)
-install.packages(c("plyr", "reshape2"))
+install.packages(c("plyr", "reshape2", "vegan"))
 ```
 
 
