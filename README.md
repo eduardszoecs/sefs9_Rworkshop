@@ -29,17 +29,27 @@ You can use the code editor of your choice. However, we recommend using [RStudio
 Packages extend the basic functionality of R and add functions or datasets.
 For this course we need a few extra packages.  Please install the following packages - simply paste and run these commands in your R prompt :
 
-
 ```{R}
 install.packages("vegan", dependencies = TRUE)
-install.packages("plyr")
-install.packages("reshape2")
+install.packages(c("plyr", "reshape2"))
 ```
 
 
 ### Downloading code and data
 Hit  the **Download ZIP** button on the right side of this page and unzip the file.,
 The unzipped folder contains all files and folders of this online repository.
+
+
+## Structure of the Course
+
+The course is structured into four parts of roughly 1.5 hours:
+
+* A general Introduction to R
+* Linear and Generalized Linear Models (Ralf B. Schäfer)
+* Ordinations and the vegan package (Eduard Szöcs)
+* Spatial data analysis (Avit Kumar Bhowmik)
+
+Each part has its own folder, with the used slides, data and code.
 
 
 ## License  
