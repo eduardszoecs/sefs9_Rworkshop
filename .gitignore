@@ -7,6 +7,7 @@ SEFS9_Geneva.Rproj
 
 # misc
 *.html
+.*~lock.*
 
 # beamer
 *.log
@@ -16,3 +17,6 @@ SEFS9_Geneva.Rproj
 *.toc
 *cache
 *concordance.tex
+*.tex
+
+
