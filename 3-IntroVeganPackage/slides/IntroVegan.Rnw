@@ -63,10 +63,10 @@
 
 %%% ----------------------------------------------------------------------------
 \begin{document}
-<<r setup, echo = FALSE, results = 'hide', message = FALSE>>=
+<<r setup, echo = FALSE, results = 'hide', message = FALSE, purl=FALSE>>=
 knitr::opts_chunk$set(comment = NA, fig.align = "center",
                       out.width = "0.7\\linewidth",
-                      echo = TRUE, message = TRUE, warning = TRUE,
+                      echo = TRUE, message = FALSE, warning = TRUE,
                       cache = TRUE, size = 'footnotesize'
                       )
 knitr:::opts_knit$set(root.dir = '/home/edisz/Documents/Uni/Projects/PHD/CONFERENCES/SEFS9_Geneva/3-IntroVeganPackage/data/')
@@ -77,6 +77,12 @@ knitr:::opts_knit$set(root.dir = '/home/edisz/Documents/Uni/Projects/PHD/CONFERE
 
 \begin{frame}
 \frametitle{}
+\begin{columns}
+  \begin{column}{0.5\textwidth}
+  \end{column}
+  \begin{column}{0.5\textwidth}
+  \end{column}
+\end{columns}
 \end{frame}
 
 
@@ -90,55 +96,234 @@ knitr:::opts_knit$set(root.dir = '/home/edisz/Documents/Uni/Projects/PHD/CONFERE
 
 \subsection{}
 \begin{frame}
-\frametitle{Demonstration: Salinization and Pestices}
+\frametitle{Exercise: Salinization and Pestices}
+\begin{columns}
+  \begin{column}{0.4\textwidth}
+    \includegraphics[width = \textwidth]{fig/testmap.pdf}
+  \end{column}
+  
+  \begin{column}{0.6\textwidth}
+    \begin{itemize}
+      \item Macroivertebrates
+      \item 24 sites
+      \item covering a salinity and toxicity gradient
+    \end{itemize}
+    \pause
+    \vspace{1em}
+    \color{hilight}{Questions: }
+    \begin{itemize}
+      \item Interaction between salinization and pesticides?
+      \item Which species are affected?
+      \item Other influences?
+    \end{itemize}
+  \end{column}
+\end{columns}
 
-\blfootnote{\color{gray} Szöcs, E., Kefford, B.J., Schäfer, R.B., 2012. Is there an interaction of the effects of salinity and pesticides on the community structure of macroinvertebrates? Science of the Total Environment 437, 121–126.}
+\blfootnote{\color{gray} The dataset is published in: Szöcs, E., Kefford, B.J., Schäfer, R.B., 2012. Is there an interaction of the effects of salinity and pesticides on the community structure of macroinvertebrates? Science of the Total Environment 437, 121–126.}
 \end{frame}
 
 
-\begin{frame}
-\frametitle{Demonstration: Salinization and Pestices}
-<<r setwd, eval = FALSE>>=
-setwd('your/workingdirectory')
-@
-% setwd('/home/edisz/Documents/Uni/Projects/PHD/CONFERENCES/SEFS9_Geneva/3-IntroVeganPackage/data/')
-<<r load_data, eval = FALSE>>=
-abu <- read.table('melbourneAbu.csv', sep = ';')
-
-env <- read.table('melbourneEnv.csv', sep = ';')
+\begin{frame}[fragile]
+\frametitle{Exercise: Salinization and Pestices}
+<<r setwd, eval = FALSE, purl=FALSE>>=
+setwd('yourpath/3-IntroVeganPackage/data/')
+abu <- read.table('melbourneAbu.csv', sep = ';', header = TRUE)
+env <- read.table('melbourneEnv.csv', sep = ';', header = TRUE)
 @
 
-<<r load_data2, echo = FALSE>>=
-setwd('/home/edisz/Documents/Uni/Projects/PHD/CONFERENCES/SEFS9_Geneva/3-IntroVeganPackage/data/')
-abu <- read.table('melbourneAbu.csv', sep = ';')
-env <- read.table('melbourneEnv.csv', sep = ';')
+<<r load_mel, echo = FALSE, cache=FALSE>>=
+abu <- read.table('melbourneAbu.csv', sep = ';', header = TRUE)
+env <- read.table('melbourneEnv.csv', sep = ';', header = TRUE)
+@
+
+<<>>=
+dim(env)
+dim(abu)
+@
+
+24 sites, 22 environmental variables, 75 taxa
+
+<<>>=
+head(env[ , 1:10])
 @
 \end{frame}
 
 
 \subsection{}
-\begin{frame}
-\frametitle{Exercise: Doubs river fish communities}
+\begin{frame}[fragile]
+\frametitle{Demonstration: Doubs river fish communities}
+\begin{columns}
+  \begin{column}{0.5\textwidth}
+    \includegraphics[width = \textwidth]{fig/Le_Doubs_(carte).jpg}
+  \end{column}
+  \begin{column}{0.5\textwidth}
+    \begin{itemize}
+      \item Fish
+      \item 30 sites along the Doubs River
+    \end{itemize}
+    \pause
+    \vspace{2em}
+    \color{hilight}{Questions}
+    \begin{itemize}
+      \item How does fish composition change downstream?
+      \item Environmental drivers?
+    \end{itemize}
+  \end{column}
+\end{columns}
+\end{frame}
+
+
+\subsection{}
+\begin{frame}[fragile]
+\frametitle{Demonstration: Doubs river fish communities | Species}
+<<r Dsetwd, eval = FALSE, purl=FALSE>>=
+setwd('your/workingdirectory')
+Dabu <- read.table('doubsAbu.csv', sep = ',', header = TRUE)
+Denv <- read.table('doubsEnv.csv', sep = ',', header = TRUE)
+Dspa <- read.table('doubsSpa.csv', sep = ',', header = TRUE)
+@
+
+<<r load_doubs, echo = FALSE, cache=FALSE>>=
+Dabu <- read.table('doubsAbu.csv', sep = ',', header = TRUE)
+Denv <- read.table('doubsEnv.csv', sep = ',', header = TRUE)
+Dspa <- read.table('doubsSpa.csv', sep = ',', header = TRUE)
+@
+
+<<>>=
+dim(Dabu)
+@
+
+30 sites,  27 taxa
+
+<<>>=
+head(Dabu[ , 1:18])
+@
+\end{frame}
+
+\subsection{}
+\begin{frame}[fragile]
+\frametitle{Demonstration: Doubs river fish communities | Environment}
+<<>>=
+dim(Denv)
+@
+
+30 sites,  11 variables
+
+<<>>=
+head(Denv)
+@
 \end{frame}
 
 
 
 %%% ----------------------------------------------------------------------------
-\section{Constrained Ordination}
+\section{Unconstrained Ordination}
 \begin{frame}[plain]{}
 \begin{center}
-  \Huge \color{title} Unconstrained Ordination
+  \Huge \color{title} Unconstrained Ordination \\
+  \vspace{4em}
+  \normalsize
+  Principal Components Analysis (PCA) \\ 
+  Principal coordinates analysis (PCoA) \\
+  Nonmetric Multidimensional Scaling (NMDS)
 \end{center}
 \end{frame}
 
 
 \subsection{}
+\begin{frame}[fragile]
+\frametitle{Principal Components Analysis (PCA) | Why?}
+
+\begin{columns}
+  \begin{column}{0.5\textwidth}
+<<echo = FALSE, out.width='\\textwidth'>>=
+    par(mfrow = c(2, 2))
+    plot(Dspa, asp = 1, pch = 21, cex = 5*Denv$alt / max(Denv$alt), bg = 'darkred',
+         main = 'Altitude')
+    lines(Dspa, col = 'steelblue', lwd = 2)
+    plot(Dspa, asp = 1, pch = 21, cex = 5*Denv$deb / max(Denv$deb), bg = 'darkred',
+         main = 'Discharge')
+    lines(Dspa, col = 'steelblue', lwd = 2)
+    plot(Dspa, asp = 1, pch = 21, cex = 5*Denv$nit / max(Denv$nit), bg = 'darkred',
+         main = 'Nitrate')
+    lines(Dspa, col = 'steelblue', lwd = 2)
+    plot(Dspa, asp = 1, pch = 21, cex = 5*Denv$pho / max(Denv$pho), bg = 'darkred',
+         main = 'Phosphate')
+    lines(Dspa, col = 'steelblue', lwd = 2)
+@
+  \end{column}
+  \begin{column}{0.5\textwidth}
+    \begin{itemize}
+      \item 11 variables
+    \end{itemize}
+    \color{hilight}{Questions: }
+    \begin{itemize}
+      \item Which variable are correlated?
+      \item Which sites have similar conditions?
+      \item How do conditions change downstream?
+    \end{itemize}
+    
+    \pause
+    \begin{itemize}
+      \item pairwise comparisons
+      \item 3D possible
+      \item more than 3 dimensions?
+    \end{itemize}
+
+  \end{column}
+\end{columns}
+
+\end{frame}
+
+
+\subsection{}
 \begin{frame}
-\frametitle{Unconstrained Ordination}
+\frametitle{Principal Components Analysis (PCA) | What?}
 \begin{itemize}
-  \item Principal Components Analysis (PCA)
-  \item Nonmetric Multidimensional Scaling (NMDS)
+  \item \emph{Look from another angle on the data}
+  \item PCA is just a rotation of the coordinate system
+  \item The rotation is done so that the first axis contains as much variation as possible
+  \item Second axis than most of remaining variation
 \end{itemize}
+
+<<eval = FALSE, echo = FALSE>>=
+require(rgl)
+plot3d(Denv[ , c('das', 'alt', 'pho')], pch = 16, size = 5)
+@
+
+\end{frame}
+
+\subsection{}
+\begin{frame}[fragile]
+\frametitle{Principal Components Analysis (PCA) | How?}
+<<message = FALSE>>=
+require(vegan)
+PCA <- rda(Denv, scale = TRUE)
+plot(PCA)
+@
+\end{frame}
+
+
+\subsection{}
+\begin{frame}[fragile]
+\frametitle{Principal Components Analysis (PCA) | Interpretation? (I)}
+\begin{columns}
+  \begin{column}{0.5\textwidth}
+<<out.width = '\\textwidth'>>=
+biplot(PCA)
+@
+  \end{column}
+  \begin{column}{0.5\textwidth}
+  \end{column}
+\end{columns}
+\end{frame}
+
+\subsection{}
+\begin{frame}[fragile]
+\frametitle{Principal Components Analysis (PCA) | Interpretation? (II)}
+<<>>=
+biplot(PCA)
+@
 \end{frame}
 
 
@@ -150,11 +335,15 @@ env <- read.table('melbourneEnv.csv', sep = ';')
   \color{background}
   \Huge \textbf{Your turn}! \\[1em]
   \large
-  Load the doubs data. \\
-  Is there a downstream gradient?
+  Load the Melbourne dataset (only environmental variables). \\
+  \textbf{Exclude} the variables ID, logCond and logmaxTU. \\
+  Perform a PCA. \\
+  Which variables are correlated? \\
+  What other gradients are present in this dataset?\\
 \end{center}
 \end{frame}
 \egroup
+
 
 
 %%% ----------------------------------------------------------------------------
