@@ -1,6 +1,9 @@
-\documentclass[9pt, compress]{beamer}
+\documentclass[9pt, compress, table]{beamer}
 \usepackage[utf8]{inputenc}
 \usepackage{color}
+\usepackage{adjustbox}
+\hypersetup{bookmarksopen=true,bookmarksopenlevel=4}
+\setcounter{tocdepth}{4}
 
 
 %%% ----- Theme ----------------------------------------------------------------
@@ -27,6 +30,7 @@
 \definecolor{title}{RGB}{77, 123, 150}
 \definecolor{gray}{RGB}{116,116,116}
 \definecolor{hilight}{RGB}{228, 97, 0}
+\definecolor{green}{rgb}{0.55, 0.71, 0.0}
 \setbeamercolor{section in head/foot}{fg = title}
 % set colors
 \setbeamercolor{titlelike}{fg=title}
@@ -86,6 +90,21 @@ knitr:::opts_knit$set(root.dir = '/home/edisz/Documents/Uni/Projects/PHD/CONFERE
 
 
 %%% ----------------------------------------------------------------------------
+\begin{frame}
+\frametitle{Topics adressed}
+  \adjustbox{max height=\dimexpr\textheight-5.5cm\relax, % scale table to fit to slide
+             max width=\textwidth}{
+    \begin{tabular}{lcccc}
+     & \multicolumn{1}{l}{\textbf{Raw data}} & \multicolumn{1}{l}{\textbf{Transformed data}} & \multicolumn{1}{l}{\textbf{Unimodal}} & \multicolumn{1}{l}{\textbf{Distance-based}} \\ 
+    \textbf{Unconstrained} & \cellcolor{green} PCA & tb-PCA & CA, DCA & \cellcolor{green} PCoA, NMDS \\ 
+    \textbf{Constrained} & \cellcolor{green} RDA & \cellcolor{green} tb-RDA & CCA & db-RDA \\ 
+    \end{tabular}
+  }
+
+\end{frame}
+
+
+%%% ----------------------------------------------------------------------------
 \section{Datasets}
 \begin{frame}[plain]{}
 \begin{center}
@@ -93,7 +112,7 @@ knitr:::opts_knit$set(root.dir = '/home/edisz/Documents/Uni/Projects/PHD/CONFERE
 \end{center}
 \end{frame}
 
-\subsection{}
+\subsection{Salinization and Pestices}
 \begin{frame}
 \frametitle{Exercise: Salinization and Pestices}
 \begin{columns}
@@ -117,11 +136,11 @@ knitr:::opts_knit$set(root.dir = '/home/edisz/Documents/Uni/Projects/PHD/CONFERE
     \end{itemize}
   \end{column}
 \end{columns}
-
 \blfootnote{\color{gray} \footnotesize The dataset is published in: Szöcs, E., Kefford, B.J., Schäfer, R.B., 2012. Is there an interaction of the effects of salinity and pesticides on the community structure of macroinvertebrates? Science of the Total Environment 437, 121–126.}
 \end{frame}
 
 
+\subsection{}
 \begin{frame}[fragile]
 \frametitle{Exercise: Salinization and Pestices}
 <<r setwd, eval = FALSE, purl=FALSE>>=
@@ -148,7 +167,7 @@ head(env[ , 1:10])
 \end{frame}
 
 
-\subsection{}
+\subsection{Doubs river fish}
 \begin{frame}[fragile]
 \frametitle{Demonstration: Doubs river fish communities}
 \begin{columns}
@@ -169,6 +188,7 @@ head(env[ , 1:10])
     \end{itemize}
   \end{column}
 \end{columns}
+\blfootnote{\color{gray} \footnotesize Verneaux, J. (1973) Cours d'eau de Franche-Comte (Massif du Jura). Recherches ecologiques sur le reseau hydrographique du Doubs. Essai de biotypologie. These d'etat, Besancon. 1–257.}
 \end{frame}
 
 
@@ -229,10 +249,10 @@ head(Denv)
 \end{frame}
 
 
-\subsection{}
+%%% ----------------------------------------------------------------------------
+\subsection{PCA}
 \begin{frame}[fragile]
 \frametitle{Principal Components Analysis (PCA) | Why?}
-
 \begin{columns}
   \begin{column}{0.5\textwidth}
 <<envplot, echo = FALSE, out.width='\\textwidth'>>=
@@ -278,23 +298,23 @@ head(Denv)
 \subsection{}
 \begin{frame}
 \frametitle{Principal Components Analysis (PCA) | What?}
-\begin{itemize}
-  \item \emph{"Look from another angle on the data"}
-  \item PCA is just a rotation of the coordinate system
-  \item The rotation is done so that the first axis contains as much variation as possible
-  \item Second axis than most of remaining variation
-\end{itemize}
-
-\pause
-\vspace{1em}
-\color{gray}{Maths:}
-\begin{itemize}
-  \color{gray}
-  \item The covariance (or correlation) matrix is decomposed into its Eigenvectors and Eigenvalues. 
-  \item The Eigenvectors give the roration needed
-  \item The Eigenvalues stretch the axes
-\end{itemize}
-
+  \begin{itemize}
+    \item \emph{"Look from another angle on the data"}
+    \item PCA is just a rotation of the coordinate system
+    \item The rotation is done so that the first axis contains as much variation as possible
+    \item Second axis than most of remaining variation
+  \end{itemize}
+  
+  \pause
+  \vspace{1em}
+  \color{gray}{Maths:}
+  \begin{itemize}
+    \color{gray}
+    \item The covariance (or correlation) matrix is decomposed into its Eigenvectors and Eigenvalues. 
+    \item The Eigenvectors give the roration needed
+    \item The Eigenvalues stretch the axes
+  \end{itemize}
+  
 <<eval = FALSE, echo = FALSE>>=
 require(rgl)
 plot3d(Denv[ , c('das', 'alt', 'pho')], pch = 16, size = 5)
@@ -323,10 +343,9 @@ biplot(PCA, cex = 5, scaling = 3)
 @
   \end{column}
   \begin{column}{0.5\textwidth}
-  \begin{itemize}
-    \item 
-  \end{itemize}
-
+    \begin{itemize}
+      \item 
+    \end{itemize}
   \end{column}
 \end{columns}
 \end{frame}
@@ -340,13 +359,13 @@ summary(PCA, display = NULL, scaling = 3)
 \end{frame}
 
 
-
+\subsection{Your turn!}
 \bgroup
 \setbeamercolor{background canvas}{bg=title}
 \begin{frame}[plain]{}
 \begin{center}
   \color{background}
-  \Huge \textbf{Your turn}! \\[1em]
+  \Huge \textbf{Your turn!} \\[1em]
   \large
   Load the Melbourne dataset (only environmental variables). \\
   \textbf{Exclude} the variables ID, logCond and logmaxTU. \\
@@ -383,10 +402,10 @@ PCA <- rda(take, scale = TRUE)
 \end{frame}
 
 
-
-\subsection{}
+%%% ----------------------------------------------------------------------------
+\subsection{Principal component regression}
 \begin{frame}[fragile]
-\frametitle{Excursus | principal component regression (PCR)}
+\frametitle{Excursus | Principal component regression (PCR)}
   \color{hilight}{Question:}
     \begin{itemize}
       \item How is diversity related to salinity, pesticides and other variables?
@@ -419,8 +438,8 @@ summary(model)
 \end{frame}
 
 
-
-\subsection{}
+%%% ----------------------------------------------------------------------------
+\subsection{Distance measures}
 \begin{frame}[fragile]
 \frametitle{Abundances | The Problem with zeros}
 \begin{columns}
@@ -446,13 +465,12 @@ summary(model)
 @
   \end{column}
   \begin{column}{0.6\textwidth}
-  \begin{itemize}
-    \item Species may be absent due to different factors (too high flow, too saline, etc.)
-    \item \emph{Absence} contains less information then \emph{Presence}
-    \item PCA preserves the euclidean distance between sites
-    \item Need another measure of similarity for (raw) abundances
-  \end{itemize}
-
+    \begin{itemize}
+      \item Species may be absent due to different factors (too high flow, too saline, etc.)
+      \item \emph{Absence} contains less information then \emph{Presence}
+      \item PCA preserves the euclidean distance between sites
+      \item Need another measure of similarity for (raw) abundances
+    \end{itemize}
   \end{column}
 \end{columns}
 \end{frame}
@@ -460,37 +478,36 @@ summary(model)
 \subsection{}
 \begin{frame}[fragile]
 \frametitle{Dissimilarity measures}
-\begin{center}
-\includegraphics[width=0.8\textwidth]{fig/Anderson_2011.png}
-\end{center}
-
-\pause
-\begin{TINY}
-<<echo = FALSE>>=
-mat <- matrix(c(0, 4, 8, 0, 1, 1, 1, 0, 0), nrow = 3, byrow = TRUE)
-colnames(mat) <- c('Spe1', 'Spe2', 'Spe3')
-rownames(mat) <- c('sit1', 'sit2', 'sit3')
-mat
-@
-\begin{columns}
-  \begin{column}{0.5\textwidth}
-<<>>=
-vegdist(mat, method = 'euclidean')
-@
-  \end{column}
-  \begin{column}{0.5\textwidth}
-<<>>=
-vegdist(mat, method = 'bray')
-@
-  \end{column}
-\end{columns}
-\end{TINY}
-
+  \begin{center}
+  \includegraphics[width=0.8\textwidth]{fig/Anderson_2011.png}
+  \end{center}
+  \pause
+  \begin{TINY}
+  <<echo = FALSE>>=
+  mat <- matrix(c(0, 4, 8, 0, 1, 1, 1, 0, 0), nrow = 3, byrow = TRUE)
+  colnames(mat) <- c('Spe1', 'Spe2', 'Spe3')
+  rownames(mat) <- c('sit1', 'sit2', 'sit3')
+  mat
+  @
+  \begin{columns}
+    \begin{column}{0.5\textwidth}
+  <<>>=
+  vegdist(mat, method = 'euclidean')
+  @
+    \end{column}
+    \begin{column}{0.5\textwidth}
+  <<>>=
+  vegdist(mat, method = 'bray')
+  @
+    \end{column}
+  \end{columns}
+  \end{TINY}
 \blfootnote{\color{gray} \footnotesize Anderson, M.J., Crist, T.O., et al. , 2011. Navigating the multiple meanings of beta diversity: a roadmap for the practicing ecologist. Ecology Letters 14, 19–28.}
 \end{frame}
 
 
-\subsection{}
+%%% ----------------------------------------------------------------------------
+\subsection{PCoA}
 \begin{frame}[fragile]
 \frametitle{Principal coordinates analysis (PCoA)}
   \begin{itemize}
@@ -515,7 +532,8 @@ vegdist(mat, method = 'bray')
   PCOA <- cmdscale(Dabu_dist, eig = TRUE)
   
   # Create plot
-  plot(PCOA$points, type = 'n')
+  plot(PCOA$points, type = 'n', 
+       xlab = 'PCOA1', ylab = 'PCOA2')
   text(PCOA$points, 
        labels = rownames(Dabu), cex = 0.9)
   abline(h = 0 , lty = 'dotted')
@@ -526,6 +544,17 @@ vegdist(mat, method = 'bray')
   text(wa, labels = colnames(Dabu), 
        col = 'red', cex = 0.7)
   @
+  
+<<echo=FALSE, results=FALSE, purl=FALSE, warning=FALSE>>=
+Dabu_dist <- vegdist(Dabu, method = 'bray')
+PCOA <- cmdscale(Dabu_dist, eig = TRUE)
+@
+
+<<>>=
+# explained variance
+(PCOA$eig / sum(PCOA$eig))[1:2] * 100
+@
+
     \end{column}
     \begin{column}{0.45\textwidth}
   <<pcoa_plot2, warning=FALSE, echo = FALSE, purl=FALSE, out.width='1.2\\textwidth'>>=
@@ -545,13 +574,70 @@ vegdist(mat, method = 'bray')
 \end{frame}
 
 
-\subsection{}
+%%% ----------------------------------------------------------------------------
+\subsection{NMDS}
 \begin{frame}[fragile]
 \frametitle{Nonmetric Multidimensional Scaling (NMDS)}
+  \begin{itemize}
+    \item Similar to PCoA
+    \item Does not preserve exact distances between objects
+    \item Possibly better representation in low dimensions
+    \item \textbf{Not} eiegnvalue based, iterative algorithm
+    \item Axes have no meaning, just the relativ distances
+  \end{itemize}
+\end{frame}
 
+\subsection{}
+\begin{frame}[fragile, t]
+\frametitle{Nonmetric Multidimensional Scaling (NMDS)}
+  \begin{columns}[t]
+    \begin{column}{0.55\textwidth}
+  <<nmds_plot, warning=FALSE, eval = FALSE, message=FALSE>>=
+  # Distance matrix
+  Dabu_0 <- Dabu[!rowSums(Dabu) == 0, ]
+  Dabu_dist <- vegdist(Dabu_0, method = 'bray')
+  
+  # NMDS
+  NMDS <- metaMDS(Dabu_dist, k = 2)
+  
+  # Plot
+  plot(NMDS, type = 't')
+  
+  # Add species as weighted averages
+  wa <- wascores(NMDS$points, Dabu_0)
+  text(wa, labels = colnames(Dabu), 
+       col = 'red', cex = 0.7)
+  @
+
+<<results=FALSE, echo = FALSE, purl = FALSE>>=
+  Dabu_0 <- Dabu[!rowSums(Dabu) == 0, ]
+  Dabu_dist <- vegdist(Dabu_0, method = 'bray')
+  NMDS <- metaMDS(Dabu_dist, k = 2, trace = 0)
+@
+
+<<>>=
+  # Stress value
+  NMDS$stress
+@
+
+
+    \end{column}
+    \begin{column}{0.45\textwidth}
+  <<nmds_plot2, warning=FALSE, echo = FALSE, purl=FALSE, out.width='1.2\\textwidth', message=FALSE>>=
+  Dabu_0 <- Dabu[!rowSums(Dabu) == 0, ]
+  Dabu_dist <- vegdist(Dabu_0, method = 'bray')
+  NMDS <- metaMDS(Dabu_dist, k = 2, trace = 0)
+  plot(NMDS, type = 't')
+  wa <- wascores(NMDS$points, Dabu_0)
+  text(wa, labels = colnames(Dabu), 
+       col = 'red', cex = 0.7)
+  @
+    \end{column}
+  \end{columns}
 \end{frame}
 
 
+\subsection{Your turn!}
 \bgroup
 \setbeamercolor{background canvas}{bg=title}
 \begin{frame}[plain]{}
@@ -565,12 +651,14 @@ vegdist(mat, method = 'bray')
 \egroup
 
 
-\subsection{}
+%%% ----------------------------------------------------------------------------
+\subsection{Indirect Gradient Analysis}
 \begin{frame}[fragile]
 \frametitle{Indirect Gradient Analysis}
 
 \end{frame}
 
+\subsection{Your turn!}
 \bgroup
 \setbeamercolor{background canvas}{bg=title}
 \begin{frame}[plain]{}
@@ -603,6 +691,7 @@ vegdist(mat, method = 'bray')
 \end{itemize}
 \end{frame}
 
+\subsection{Your turn!}
 \bgroup
 \setbeamercolor{background canvas}{bg=title}
 \begin{frame}[plain]{}
@@ -625,6 +714,7 @@ vegdist(mat, method = 'bray')
 \end{frame}
 
 
+\subsection{Your turn!}
 \bgroup
 \setbeamercolor{background canvas}{bg=title}
 \begin{frame}[plain]{}
