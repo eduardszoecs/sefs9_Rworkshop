@@ -30,13 +30,14 @@ Packages extend the basic functionality of R and add functions or datasets.
 For this course we need a few extra packages.  Please install the following packages - simply paste and run this command in your R prompt :
 
 ```{R}
-install.packages(c("plyr", "reshape2", "vegan", "rgl"))
+install.packages(c("vegan", "rgl"))
 ```
 
 
 ### Downloading code and data
-Hit  the **Download ZIP** button on the right side of this page and unzip the file.
-The unzipped folder contains all files and folders of this online repository.
+
+1. [Klick here](https://github.com/EDiLD/sefs9_Rworkshop/archive/master.zip)) to download all the material.
+2. Unzip the file - The unzipped folder contains all files and folders of this online repository.
 
 
 ## Structure of the Course

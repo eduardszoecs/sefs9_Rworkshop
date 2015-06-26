@@ -806,7 +806,8 @@ PCOA <- cmdscale(Dabu_dist, eig = TRUE)
     \item NMDS with bray-curtis distance
   \end{enumerate}
   
-  What are the differences
+  What are the differences between ordinations? \\
+  Which represent better the underlying gradient?
   
 \end{center}
 \end{frame}
