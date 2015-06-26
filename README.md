@@ -35,7 +35,7 @@ install.packages(c("plyr", "reshape2", "vegan", "rgl"))
 
 
 ### Downloading code and data
-Hit  the **Download ZIP** button on the right side of this page and unzip the file.,
+Hit  the **Download ZIP** button on the right side of this page and unzip the file.
 The unzipped folder contains all files and folders of this online repository.
 
 
@@ -45,10 +45,14 @@ The course is structured into four parts of roughly 1.5 hours:
 
 * A general Introduction to R
 * Linear and Generalized Linear Models (Ralf B. Schäfer)
-* Ordinations and the vegan package (Eduard Szöcs)
+* Ordinations (Eduard Szöcs)
 * Spatial data analysis (Avit Kumar Bhowmik)
 
-Each part has its own folder, with the used slides, data and code.
+Each part has its own folder, with slides, data, code and other materials.
+
+## Feedback
+
+Please rate our course by filling [this questionnaire](https://docs.google.com/forms/d/1wYkbajB_q5NPxzqJfS4gAwrRro7BcOd4OE_W5tmiOYo/viewform?usp=send_form). It is anonymous and will be only used to improve the course.
 
 
 ## License  
