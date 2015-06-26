@@ -15,9 +15,10 @@ SEFS9_Geneva.Rproj
 *.snm
 *.synctex.gz
 *.toc
-*cache
-*concordance.tex
 *.tex
 *.vrb
-
+# dirs
+*cache
+*concordance.tex
+*figure
 
