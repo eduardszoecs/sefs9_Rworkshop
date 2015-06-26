@@ -104,6 +104,8 @@ knitr:::opts_knit$set(root.dir = '/home/edisz/Documents/Uni/Projects/PHD/CONFERE
     \textbf{Other} & & & & Permanova, Dispersion & manyglm
     \end{tabular}
   }
+  \vspace{1cm}
+  No maths today ;)
 
 \end{frame}
 
@@ -147,23 +149,28 @@ knitr:::opts_knit$set(root.dir = '/home/edisz/Documents/Uni/Projects/PHD/CONFERE
 \subsection{}
 \begin{frame}[fragile]
 \frametitle{Exercise: Salinization and Pestices}
-<<r setwd, eval = FALSE, purl=FALSE>>=
-setwd('yourpath/3-IntroVeganPackage/data/')
+<<echo=FALSE>>=
+### ----- Data sets ------------------------------------------------------------
+### ---------------
+### Melbourne data
+@
+
+<<r load_mel, echo = TRUE, cache=FALSE>>=
+# setwd('3-Ordination/data/')
 abu <- read.table('melbourneAbu.csv', sep = ';', header = TRUE)
 env <- read.table('melbourneEnv.csv', sep = ';', header = TRUE)
 @
 
-<<r load_mel, echo = FALSE, cache=FALSE>>=
-abu <- read.table('melbourneAbu.csv', sep = ';', header = TRUE)
-env <- read.table('melbourneEnv.csv', sep = ';', header = TRUE)
-@
-
-<<>>=
+<<tidy.opts=list(keep.comment=FALSE)>>=
+# dimensions of data.frame
 dim(env)
 dim(abu)
 @
 
 24 sites, 22 environmental variables, 75 taxa
+<<echo=FALSE>>=
+### first rows of environmental data (only first 10 variables)
+@
 
 <<>>=
 head(env[ , 1:10])
@@ -199,17 +206,29 @@ head(env[ , 1:10])
 \subsection{}
 \begin{frame}[fragile]
 \frametitle{Demonstration: Doubs river fish communities | Species}
+<<echo=FALSE>>=
+
+
+### ---------------
+### Doubs river data
+@
+
 <<r Dsetwd, eval = FALSE, purl=FALSE>>=
-setwd('your/workingdirectory')
 Dabu <- read.table('doubsAbu.csv', sep = ',', header = TRUE)
 Denv <- read.table('doubsEnv.csv', sep = ',', header = TRUE)
 Dspa <- read.table('doubsSpa.csv', sep = ',', header = TRUE)
 @
 
 <<r load_doubs, echo = FALSE, cache=FALSE>>=
+# Load Doubs data sets
 Dabu <- read.table('doubsAbu.csv', sep = ',', header = TRUE)
 Denv <- read.table('doubsEnv.csv', sep = ',', header = TRUE)
 Dspa <- read.table('doubsSpa.csv', sep = ',', header = TRUE)
+@
+
+
+<<echo=FALSE>>=
+# Dimensions of tables (30 sites,  27 taxa)
 @
 
 <<>>=
@@ -227,6 +246,7 @@ head(Dabu[ , 1:18])
 \begin{frame}[fragile]
 \frametitle{Demonstration: Doubs river fish communities | Environment}
 <<>>=
+# Dimension and first rows of Environmental data
 dim(Denv)
 @
 
@@ -241,8 +261,17 @@ head(Denv)
 \subsection{Dummy abundances}
 \begin{frame}[fragile]
 \frametitle{Exercise: Dummy abundances}
+<<echo=FALSE>>=
+
+
+### ---------------
+### Artificial data
+@
+
 <<dummyplot, out.height='0.7\\textheight'>>=
+# Load dummy data
 dummy <- read.table('dummydata.csv', header = TRUE, sep = ';')
+# plot dummy data
 matplot(dummy[ , -1], type = 'l', xlab = 'Site', ylab = 'Abundance', 
         lty = 'solid', lwd = 2)
 legend('topright', legend = colnames(dummy)[-1],
@@ -273,6 +302,14 @@ legend('topright', legend = colnames(dummy)[-1],
 \begin{columns}
   \begin{column}{0.5\textwidth}
 <<envplot, echo = FALSE, out.width='\\textwidth'>>=
+
+
+
+### ----------------------------------------------------------------------------
+### Unconstrained Ordination
+
+### ----------
+# Slide 12 - plot environmental variables along doubs river
     par(mfrow = c(2, 2))
     plot(Dspa, asp = 1, pch = 21, cex = 5*Denv$alt / max(Denv$alt), bg = 'darkred',
          main = 'Altitude')
@@ -333,17 +370,25 @@ legend('topright', legend = colnames(dummy)[-1],
     \item The Eigenvectors give the rotation needed
     \item The Eigenvalues stretch the axes
   \end{itemize}
-  
-<<eval = FALSE, echo = FALSE>>=
+
+<<echo = FALSE, results = 'hide'>>=
+### 3-D Plot
 require(rgl)
 plot3d(Denv[ , c('das', 'alt', 'pho')], pch = 16, size = 5)
 @
+
 
 \end{frame}
 
 \subsection{}
 \begin{frame}[fragile]
 \frametitle{Principal Components Analysis (PCA) | How?}
+<<echo=FALSE>>=
+
+### ----------
+### PCA
+@
+
 <<pca_plot, message = FALSE>>=
 require(vegan)
 PCA <- rda(Denv, scale = TRUE)
@@ -357,6 +402,12 @@ plot(PCA, scaling = 3)
 \frametitle{Principal Components Analysis (PCA) | Interpretation? (I)}
 \begin{columns}
   \begin{column}{0.5\textwidth}
+<<echo=FALSE>>=
+
+## Create biplot with arrows. 
+## Scaling 3 is symmetric scaling, all interpretations are approximates.
+@
+
 <<biplot, out.width = '\\textwidth'>>=
 biplot(PCA, cex = 5, scaling = 3)
 @
@@ -463,8 +514,17 @@ for (i in 1:4) {
 @
 }
 
+<<echo=FALSE>>=
+
+
+
+### -----------
+## Create biplot with arrows and color ellipses added
+@
+
 \visible<5->{
 <<biplot3e, out.width = '\\textwidth', echo = FALSE>>=
+# biplot
 bp <- biplot(PCA, cex = 5, scaling = 3)
 # colors to use
 cols <- rainbow(5, start = 2/6)
@@ -472,14 +532,14 @@ cols <- rainbow(5, start = 2/6)
 g <-  c(rep('g1', 10), rep('g2', 6), 
                         rep('g3', 6), rep('g4', 4),
                         rep('g5', 4))
-
+# for every group add one ellipse
 for (i in 1:5) {
   ordiellipse(bp, groups = g, 
               show.groups = unique(g)[i], 
               col = cols[i], 
               lwd = 4)
 }
-# See ?ordiellipse for other possible decorations
+# See ?ordiellipse for other possible and usefull decorations
 @
 }
   \end{column}
@@ -502,6 +562,12 @@ for (i in 1:5) {
 \subsection{}
 \begin{frame}[fragile]
 \frametitle{Principal Components Analysis (PCA) | Interpretation? (III)}
+<<echo=FALSE>>=
+
+### ----------
+### Numerical summary output
+@
+
 <<>>=
 summary(PCA, display = NULL, scaling = 3)
 @
@@ -530,6 +596,12 @@ summary(PCA, display = NULL, scaling = 3)
 \subsection{}
 \begin{frame}[fragile]
 \frametitle{Exercise}
+<<echo=FALSE>>=
+
+### ----------
+### Exercise 1 - Solution
+@
+
 <<>>=
 take <- env[ , !names(env) %in% c('ID', 'logCond', 'logmaxTU')]
 PCA <- rda(take, scale = TRUE)
@@ -538,9 +610,9 @@ cumsum(PCA$CA$eig / PCA$tot.chi)[1:2]
 
   \begin{columns}
     \begin{column}{0.5\textwidth}
-  <<biplot2, out.width='\\textwidth'>>=
+<<biplot2, out.width='\\textwidth'>>=
 biplot(PCA, scaling = 3)
-  @
+@
     \end{column}
     \begin{column}{0.5\textwidth}
       \begin{itemize}
@@ -579,7 +651,15 @@ biplot(PCA, scaling = 3)
 \subsection{}
 \begin{frame}[fragile]
 \frametitle{Excursus | principal component regression (PCR)}
+<<echo=FALSE>>=
+
+### -----------------------------------------------------------------------------
+### Excursus | principal component regression (PCR)
+
+@
+
 <<>>=
+# calculate shannon diversity index
 div <- diversity(abu[ , -1], index = 'shannon')
 pc <- scores(PCA, choices = c(1, 2), scaling = 1, display = 'sites')
 model_data <- data.frame(div, pc, logCond = env$logCond, logmaxTU = env$logmaxTU)
@@ -595,24 +675,36 @@ summary(model)
 \frametitle{Abundances | The Problem with zeros}
 \begin{columns}
   \begin{column}{0.4\textwidth}
+<<echo=FALSE>>=
+
+
+
+### -----------------------------------------------------------------------------
+### Ordination of abundance data
+
+### -----------
+### Plot abundance of four species along the Doubs river
+
+@
+
 <<abuplot, echo = FALSE, out.width='1.2\\textwidth'>>=
-    par(mfrow = c(2, 2))
-    plot(Dspa, asp = 1, pch = 21, cex = 3*Dabu$TRU / max(Dabu$TRU), bg = 'darkred',
-         main = 'Brown trout')
-    lines(Dspa, col = 'steelblue', lwd = 2)
-    plot(Dspa, asp = 1, pch = 21, cex = 3*Dabu$BCO / max(Dabu$BCO), bg = 'darkred',
-         main = 'Bream')
-    lines(Dspa, col = 'steelblue', lwd = 2)
-    plot(Dspa, asp = 1, pch = 21, cex = 3*Dabu$CHA / max(Dabu$CHA), bg = 'darkred',
-         main = 'Bullhead')
-    lines(Dspa, col = 'steelblue', lwd = 2)
-    arrows(25, 133, 94, 45, code = 3, lwd = 7, col = 'darkorange')
-    text(30, 70, '?', cex = 2, col = 'darkorange')
-    plot(Dspa, asp = 1, pch = 21, cex = 3*Dabu$OMB / max(Dabu$OMB), bg = 'darkred',
-         main = 'Grayling')
-    lines(Dspa, col = 'steelblue', lwd = 2)
-    arrows(25, 133, 94, 45, code = 3, lwd = 7, col = 'darkorange')
-    text(30, 70, '?', cex = 2, col = 'darkorange')
+par(mfrow = c(2, 2))
+plot(Dspa, asp = 1, pch = 21, cex = 3*Dabu$TRU / max(Dabu$TRU), bg = 'darkred',
+     main = 'Brown trout')
+lines(Dspa, col = 'steelblue', lwd = 2)
+plot(Dspa, asp = 1, pch = 21, cex = 3*Dabu$BCO / max(Dabu$BCO), bg = 'darkred',
+     main = 'Bream')
+lines(Dspa, col = 'steelblue', lwd = 2)
+plot(Dspa, asp = 1, pch = 21, cex = 3*Dabu$CHA / max(Dabu$CHA), bg = 'darkred',
+     main = 'Bullhead')
+lines(Dspa, col = 'steelblue', lwd = 2)
+arrows(25, 133, 94, 45, code = 3, lwd = 7, col = 'darkorange')
+text(30, 70, '?', cex = 2, col = 'darkorange')
+plot(Dspa, asp = 1, pch = 21, cex = 3*Dabu$OMB / max(Dabu$OMB), bg = 'darkred',
+     main = 'Grayling')
+lines(Dspa, col = 'steelblue', lwd = 2)
+arrows(25, 133, 94, 45, code = 3, lwd = 7, col = 'darkorange')
+text(30, 70, '?', cex = 2, col = 'darkorange')
 @
   \end{column}
   \begin{column}{0.6\textwidth}
@@ -634,6 +726,13 @@ summary(model)
   \end{center}
   \pause
   \begin{TINY}
+<<echo=FALSE>>=
+
+### -----------
+### (Dis-) Similarity measures
+
+# Example with dummy data (3 sites, 3 species)
+@
   <<echo = FALSE>>=
   mat <- matrix(c(0, 4, 8, 0, 1, 1, 1, 0, 0), nrow = 3, byrow = TRUE)
   colnames(mat) <- c('Spe1', 'Spe2', 'Spe3')
@@ -642,14 +741,22 @@ summary(model)
   @
   \begin{columns}
     \begin{column}{0.5\textwidth}
-  <<>>=
-  vegdist(mat, method = 'euclidean')
-  @
+<<echo=FALSE>>=
+# Calculate euclidean distance between sites
+@
+
+<<>>=
+vegdist(mat, method = 'euclidean')
+@
     \end{column}
     \begin{column}{0.5\textwidth}
-  <<>>=
-  vegdist(mat, method = 'bray')
-  @
+<<echo=FALSE>>=
+
+# Calculate Bray-Curtis distance between sites
+@
+<<>>=
+vegdist(mat, method = 'bray')
+@
     \end{column}
   \end{columns}
   \end{TINY}
@@ -675,50 +782,68 @@ summary(model)
 \frametitle{Principal coordinates analysis (PCoA)}
   \begin{columns}[t]
     \begin{column}{0.55\textwidth}
-<<pcoa_plot, warning=FALSE, eval=FALSE>>=
-  # Distance matrix
-  Dabu_dist <- vegdist(Dabu, method = 'bray')
-  
-  # PCoA
-  PCOA <- cmdscale(Dabu_dist, eig = TRUE)
-  
-  # Create plot
-  plot(PCOA$points, type = 'n', 
-       xlab = 'PCOA1', ylab = 'PCOA2')
-  text(PCOA$points, 
-       labels = rownames(Dabu), cex = 0.9)
-  abline(h = 0 , lty = 'dotted')
-  abline(v = 0 , lty = 'dotted')
-  # Add species as weighted averages
-  wa <- wascores(PCOA$points, Dabu)
-  text(wa, labels = colnames(Dabu), 
-       col = 'red', cex = 0.7)
-  @
+
+<<echo=FALSE>>=
+
+
+### -----------------------------------------------------------------------------
+### Principal Coordiante Analysis (PCoA)
+
+@
+
+<<pcoa_plot, warning=FALSE, eval=FALSE, purl = FALSE>>=
+# Distance matrix
+Dabu_dist <- vegdist(Dabu, method = 'bray')
+
+# PCoA
+PCOA <- cmdscale(Dabu_dist, eig = TRUE)
+
+# Create plot
+plot(PCOA$points, type = 'n', 
+     xlab = 'PCOA1', ylab = 'PCOA2')
+text(PCOA$points, 
+     labels = rownames(Dabu), cex = 0.9)
+abline(h = 0 , lty = 'dotted')
+abline(v = 0 , lty = 'dotted')
+# Add species as weighted averages
+wa <- wascores(PCOA$points, Dabu)
+text(wa, labels = colnames(Dabu), 
+     col = 'red', cex = 0.7)
+@
   
 <<echo=FALSE, results=FALSE, purl=FALSE, warning=FALSE>>=
 Dabu_dist <- vegdist(Dabu, method = 'bray')
 PCOA <- cmdscale(Dabu_dist, eig = TRUE)
 @
 
-<<>>=
+<<purl = FALSE>>=
 # explained variance
 (PCOA$eig / sum(PCOA$eig))[1:2] * 100
 @
 
     \end{column}
     \begin{column}{0.45\textwidth}
-<<pcoa_plot2, warning=FALSE, echo = FALSE, purl=FALSE, out.width='1.2\\textwidth'>>=
-  Dabu_dist <- vegdist(Dabu, method = 'bray')
-  PCOA <- cmdscale(Dabu_dist, eig = TRUE)
-  plot(PCOA$points, type = 'n')
-  text(PCOA$points, 
-       labels = rownames(Dabu), cex = 0.9)
-  abline(h = 0 , lty = 'dotted')
-  abline(v = 0 , lty = 'dotted')
-  wa <- wascores(PCOA$points, Dabu)
-  text(wa, labels = colnames(Dabu), 
-       col = 'red', cex = 0.7)
-  @
+<<pcoa_plot2, warning=FALSE, echo = FALSE, out.width='1.2\\textwidth', results = 'hide'>>=
+# Distance matrix
+Dabu_dist <- vegdist(Dabu, method = 'bray')
+
+# PCoA
+PCOA <- cmdscale(Dabu_dist, eig = TRUE)
+
+# Create plot
+plot(PCOA$points, type = 'n', 
+     xlab = 'PCOA1', ylab = 'PCOA2')
+text(PCOA$points, 
+     labels = rownames(Dabu), cex = 0.9)
+abline(h = 0 , lty = 'dotted')
+abline(v = 0 , lty = 'dotted')
+# Add species as weighted averages
+wa <- wascores(PCOA$points, Dabu)
+text(wa, labels = colnames(Dabu), 
+     col = 'red', cex = 0.7)
+# explained variance
+(PCOA$eig / sum(PCOA$eig))[1:2] * 100
+@
     \end{column}
   \end{columns}
 \end{frame}
@@ -742,46 +867,64 @@ PCOA <- cmdscale(Dabu_dist, eig = TRUE)
 \frametitle{Nonmetric Multidimensional Scaling (NMDS)}
   \begin{columns}[t]
     \begin{column}{0.55\textwidth}
-  <<nmds_plot, warning=FALSE, eval = FALSE, message=FALSE>>=
-  # Distance matrix
-  Dabu_0 <- Dabu[!rowSums(Dabu) == 0, ]
-  Dabu_dist <- vegdist(Dabu_0, method = 'bray')
-  
-  # NMDS
-  NMDS <- metaMDS(Dabu_dist, k = 2)
-  
-  # Plot
-  plot(NMDS, type = 't')
-  
-  # Add species as weighted averages
-  wa <- wascores(NMDS$points, Dabu_0)
-  text(wa, labels = colnames(Dabu), 
-       col = 'red', cex = 0.7)
-  @
+<<echo=FALSE>>=
 
-<<results=FALSE, echo = FALSE, purl = FALSE>>=
-  Dabu_0 <- Dabu[!rowSums(Dabu) == 0, ]
-  Dabu_dist <- vegdist(Dabu_0, method = 'bray')
-  NMDS <- metaMDS(Dabu_dist, k = 2, trace = 0)
+
+### -----------------------------------------------------------------------------
+### Nonmetric Multidimensional Scaling (NMDS)
+
 @
 
-<<>>=
-  # Stress value
-  NMDS$stress
+<<nmds_plot, warning=FALSE, eval = FALSE, message=FALSE, purl = FALSE>>=
+# Distance matrix
+Dabu_0 <- Dabu[!rowSums(Dabu) == 0, ]
+Dabu_dist <- vegdist(Dabu_0, method = 'bray')
+
+# NMDS
+NMDS <- metaMDS(Dabu_dist, k = 2, trace = 0)
+
+# Plot
+plot(NMDS, type = 't')
+
+# Add species as weighted averages
+wa <- wascores(NMDS$points, Dabu_0)
+text(wa, labels = colnames(Dabu), 
+     col = 'red', cex = 0.7)
+@
+
+<<results=FALSE, echo = FALSE, purl = FALSE>>=
+Dabu_0 <- Dabu[!rowSums(Dabu) == 0, ]
+Dabu_dist <- vegdist(Dabu_0, method = 'bray')
+NMDS <- metaMDS(Dabu_dist, k = 2, trace = 0)
+@
+
+<<purl = FALSE>>=
+# Stress value
+NMDS$stress
 @
 
 
     \end{column}
     \begin{column}{0.45\textwidth}
-  <<nmds_plot2, warning=FALSE, echo = FALSE, purl=FALSE, out.width='1.2\\textwidth', message=FALSE>>=
-  Dabu_0 <- Dabu[!rowSums(Dabu) == 0, ]
-  Dabu_dist <- vegdist(Dabu_0, method = 'bray')
-  NMDS <- metaMDS(Dabu_dist, k = 2, trace = 0)
-  plot(NMDS, type = 't')
-  wa <- wascores(NMDS$points, Dabu_0)
-  text(wa, labels = colnames(Dabu), 
-       col = 'red', cex = 0.7)
-  @
+<<nmds_plot2, warning=FALSE, echo = FALSE, out.width='1.2\\textwidth', message=FALSE, results = 'hide'>>=
+# Distance matrix
+Dabu_0 <- Dabu[!rowSums(Dabu) == 0, ]
+Dabu_dist <- vegdist(Dabu_0, method = 'bray')
+
+# NMDS
+NMDS <- metaMDS(Dabu_dist, k = 2)
+
+# Plot
+plot(NMDS, type = 't')
+
+# Add species as weighted averages
+wa <- wascores(NMDS$points, Dabu_0)
+text(wa, labels = colnames(Dabu), 
+     col = 'red', cex = 0.7)
+
+# Stress value
+NMDS$stress
+@
     \end{column}
   \end{columns}
 \end{frame}
@@ -802,8 +945,8 @@ PCOA <- cmdscale(Dabu_dist, eig = TRUE)
   \color{white}
     \item PCA
     \item PCoA with euclidean distance
-    \item PCoA with bray-curtis distance
-    \item NMDS with bray-curtis distance
+    \item PCoA with Bray-Curtis dissimilarity
+    \item NMDS with Bray-Curtis dissimilarity
   \end{enumerate}
   
   What are the differences between ordinations? \\
@@ -817,20 +960,32 @@ PCOA <- cmdscale(Dabu_dist, eig = TRUE)
 \frametitle{Exercise}
 \begin{columns}
   \begin{column}{0.7\textwidth}
-  <<ex2, out.width = '\\textwidth', echo = FALSE>>=
+  
+<<echo=FALSE>>=
+
+### ----------
+### Exercise 2 - Solution
+@
+
+<<ex2, out.width = '\\textwidth', echo = FALSE>>=
+# create 4 plots
 par(mfrow = c(2, 2))
+# plot PCA
 plot(rda(dummy[ , -1]), scaling = 3, main = 'PCA')
   
+# Plot PCoA with euclidean distance
 PCOA_eu <- cmdscale(vegdist(dummy[ , -1], 'eu'))
 plot(PCOA_eu, type = 'n', main = 'PCoA, eu')
 text(PCOA_eu, labels = dummy$Site)
 text(wascores(PCOA_eu, dummy[ , -1]), col = 'red', labels = colnames(dummy)[-1])
 
+# Plot PCoA with Bray-Curtis distance
 PCOA_bc <- cmdscale(vegdist(dummy[ , -1], 'bray'))
 plot(PCOA_bc, type = 'n', main = 'PCoA, bc')
 text(PCOA_bc, labels = dummy$Site)
 text(wascores(PCOA_bc, dummy[ , -1]), col = 'red', labels = colnames(dummy)[-1])
 
+# Plot NMDS with Bray-Curtis distance
 NMDS_bc <- metaMDS(dummy[ , -1], trace = 0)
 plot(NMDS_bc, type = 'text', main = 'NMDS, bc')
 @
