@@ -104,8 +104,10 @@ knitr:::opts_knit$set(root.dir = '/home/edisz/Documents/Uni/Projects/PHD/CONFERE
     \textbf{Other} & & & & Permanova, Dispersion & manyglm
     \end{tabular}
   }
-  \vspace{1cm}
+  \vspace{2em}
+  \begin{center}
   No maths today ;)
+  \end{center}
 
 \end{frame}
 
@@ -116,65 +118,6 @@ knitr:::opts_knit$set(root.dir = '/home/edisz/Documents/Uni/Projects/PHD/CONFERE
 \begin{center}
   \Huge \color{title} Datasets
 \end{center}
-\end{frame}
-
-\subsection{Salinization and Pestices}
-\begin{frame}
-\frametitle{Exercise: Salinization and Pestices}
-\begin{columns}
-  \begin{column}{0.4\textwidth}
-    \includegraphics[width = \textwidth]{fig/testmap.pdf}
-  \end{column}
-  
-  \begin{column}{0.6\textwidth}
-    \begin{itemize}
-      \item Macroivertebrates
-      \item 24 sites
-      \item covering a salinity and toxicity gradient
-    \end{itemize}
-    \pause
-    \vspace{1em}
-    \color{hilight}{Questions: }
-    \begin{itemize}
-      \item Interaction between salinization and pesticides?
-      \item Which species are affected?
-      \item Other influences?
-    \end{itemize}
-  \end{column}
-\end{columns}
-\blfootnote{\color{gray} \footnotesize The dataset is published in: Szöcs, E., Kefford, B.J., Schäfer, R.B., 2012. Is there an interaction of the effects of salinity and pesticides on the community structure of macroinvertebrates? Science of the Total Environment 437, 121–126.}
-\end{frame}
-
-
-\subsection{}
-\begin{frame}[fragile]
-\frametitle{Exercise: Salinization and Pestices}
-<<echo=FALSE>>=
-### ----- Data sets ------------------------------------------------------------
-### ---------------
-### Melbourne data
-@
-
-<<r load_mel, echo = TRUE, cache=FALSE>>=
-# setwd('3-Ordination/data/')
-abu <- read.table('melbourneAbu.csv', sep = ';', header = TRUE)
-env <- read.table('melbourneEnv.csv', sep = ';', header = TRUE)
-@
-
-<<tidy.opts=list(keep.comment=FALSE)>>=
-# dimensions of data.frame
-dim(env)
-dim(abu)
-@
-
-24 sites, 22 environmental variables, 75 taxa
-<<echo=FALSE>>=
-### first rows of environmental data (only first 10 variables)
-@
-
-<<>>=
-head(env[ , 1:10])
-@
 \end{frame}
 
 
@@ -254,6 +197,65 @@ dim(Denv)
 
 <<>>=
 head(Denv)
+@
+\end{frame}
+
+\subsection{Salinization and Pestices}
+\begin{frame}
+\frametitle{Exercise: Salinization and Pestices}
+\begin{columns}
+  \begin{column}{0.4\textwidth}
+    \includegraphics[width = \textwidth]{fig/testmap.pdf}
+  \end{column}
+  
+  \begin{column}{0.6\textwidth}
+    \begin{itemize}
+      \item Macroivertebrates
+      \item 24 sites
+      \item covering a salinity and toxicity gradient
+    \end{itemize}
+    \pause
+    \vspace{1em}
+    \color{hilight}{Questions: }
+    \begin{itemize}
+      \item Interaction between salinization and pesticides?
+      \item Which species are affected?
+      \item Other influences?
+    \end{itemize}
+  \end{column}
+\end{columns}
+\blfootnote{\color{gray} \footnotesize The dataset is published in: Szöcs, E., Kefford, B.J., Schäfer, R.B., 2012. Is there an interaction of the effects of salinity and pesticides on the community structure of macroinvertebrates? Science of the Total Environment 437, 121–126.}
+\end{frame}
+
+
+\subsection{}
+\begin{frame}[fragile]
+\frametitle{Exercise: Salinization and Pestices}
+<<echo=FALSE>>=
+### ----- Data sets ------------------------------------------------------------
+### ---------------
+### Melbourne data
+@
+
+<<r load_mel, echo = TRUE, cache=FALSE>>=
+# setwd('3-Ordination/data/')
+abu <- read.table('melbourneAbu.csv', sep = ';', header = TRUE)
+env <- read.table('melbourneEnv.csv', sep = ';', header = TRUE)
+@
+
+<<tidy.opts=list(keep.comment=FALSE)>>=
+# dimensions of data.frame
+dim(env)
+dim(abu)
+@
+
+24 sites, 22 environmental variables, 75 taxa
+<<echo=FALSE>>=
+### first rows of environmental data (only first 10 variables)
+@
+
+<<>>=
+head(env[ , 1:10])
 @
 \end{frame}
 
@@ -858,7 +860,7 @@ text(wa, labels = colnames(Dabu),
     \item Does not preserve exact distances between objects
     \item Possibly better representation in low dimensions
     \item \textbf{Not} eiegnvalue based, iterative algorithm
-    \item Axes have no meaning, just the relativ distances
+    \item Axes have no meaning, just the relative distances
   \end{itemize}
 \end{frame}
 
@@ -1001,8 +1003,83 @@ plot(NMDS_bc, type = 'text', main = 'NMDS, bc')
 \subsection{Indirect Gradient Analysis}
 \begin{frame}[fragile]
 \frametitle{Indirect Gradient Analysis}
+\begin{columns}[t]
+  \begin{column}{0.5\textwidth}
+    \begin{itemize}
+      \item<1-> This ordination is \textbf{only} driven by fish community data
+    \end{itemize}
+    \color{hilight}{Question:}
+    \begin{itemize}
+      \item<1-> How can we interpret the gradients in community composition?
+    \end{itemize}
+    \color{hilight}{A solution}
+    \begin{itemize}
+      \item<2-> Superimpose environmental variables
+    \end{itemize}
+  \end{column}
+  \begin{column}{0.5\textwidth}
+\only<1>{
+<<pcoa_plot5, warning=FALSE, echo = FALSE, out.width='\\textwidth', results = 'hide'>>=
+# PCoA of fish community data
+Dabu_dist <- vegdist(Dabu, method = 'bray')
+PCOA <- cmdscale(Dabu_dist, eig = TRUE)
+plot(PCOA$points, type = 'n', 
+     xlab = 'PCOA1', ylab = 'PCOA2', main = 'PCoA of fish community data')
+text(PCOA$points, 
+     labels = rownames(Dabu), cex = 0.9)
+wa <- wascores(PCOA$points, Dabu)
+text(wa, labels = colnames(Dabu), 
+     col = 'red', cex = 0.7)
+abline(h = 0 , lty = 'dotted')
+abline(v = 0 , lty = 'dotted')
+@
+}
 
+\visible<2->{
+<<envfit2, warning=FALSE, echo = FALSE, out.width='\\textwidth', results = 'hide'>>=
+
+# Superimpose Altitude to PCoA ordianation (displayed as point size)
+plot(PCOA$points,
+     xlab = 'PCOA1', ylab = 'PCOA2', 
+     cex = 4*Denv$alt / max(Denv$alt),
+     main = 'PCoA with Alt superimposed')
+wa <- wascores(PCOA$points, Dabu)
+text(wa, labels = colnames(Dabu), 
+     col = 'red', cex = 0.7)
+abline(h = 0 , lty = 'dotted')
+abline(v = 0 , lty = 'dotted')
+@
+}
+  \end{column}
+\end{columns}
 \end{frame}
+
+\subsection{}
+\begin{frame}[fragile]
+\frametitle{Indirect Gradient Analysis}
+\begin{columns}[t]
+  \begin{column}{0.5\textwidth}
+  \end{column}
+  \begin{column}{0.5\textwidth}
+<<pcoa_plot6, warning=FALSE, echo = FALSE, out.width='\\textwidth', results = 'hide'>>=
+# PCoA of fish community data
+plot(PCOA$points,
+     xlab = 'PCOA1', ylab = 'PCOA2', 
+     cex = 4*Denv$alt / max(Denv$alt),
+     main = 'PCoA with Alt superimposed')
+abline(h = 0 , lty = 'dotted')
+abline(v = 0 , lty = 'dotted')
+
+ef <- envfit(PCOA, Denv[ ,2, drop = FALSE])
+plot(ef)
+os <- ordisurf(PCOA, Denv$alt, add = TRUE)
+@
+
+  \end{column}
+\end{columns}
+\end{frame}
+
+
 
 \subsection{Your turn!}
 \bgroup

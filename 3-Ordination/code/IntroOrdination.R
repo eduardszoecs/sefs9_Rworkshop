@@ -1,14 +1,3 @@
-### ----- Data sets ------------------------------------------------------------
-### ---------------
-### Melbourne data
-# setwd('3-Ordination/data/')
-abu <- read.table('melbourneAbu.csv', sep = ';', header = TRUE)
-env <- read.table('melbourneEnv.csv', sep = ';', header = TRUE)
-# dimensions of data.frame
-dim(env)
-dim(abu)
-### first rows of environmental data (only first 10 variables)
-head(env[ , 1:10])
 
 
 ### ---------------
@@ -23,6 +12,17 @@ head(Dabu[ , 1:18])
 # Dimension and first rows of Environmental data
 dim(Denv)
 head(Denv)
+### ----- Data sets ------------------------------------------------------------
+### ---------------
+### Melbourne data
+# setwd('3-Ordination/data/')
+abu <- read.table('melbourneAbu.csv', sep = ';', header = TRUE)
+env <- read.table('melbourneEnv.csv', sep = ';', header = TRUE)
+# dimensions of data.frame
+dim(env)
+dim(abu)
+### first rows of environmental data (only first 10 variables)
+head(env[ , 1:10])
 
 
 ### ---------------
@@ -117,25 +117,25 @@ summary(model)
 ### Ordination of abundance data
 
 ### -----------
-### Plot abundance of foru species along river
+### Plot abundance of four species along the Doubs river
 
-    par(mfrow = c(2, 2))
-    plot(Dspa, asp = 1, pch = 21, cex = 3*Dabu$TRU / max(Dabu$TRU), bg = 'darkred',
-         main = 'Brown trout')
-    lines(Dspa, col = 'steelblue', lwd = 2)
-    plot(Dspa, asp = 1, pch = 21, cex = 3*Dabu$BCO / max(Dabu$BCO), bg = 'darkred',
-         main = 'Bream')
-    lines(Dspa, col = 'steelblue', lwd = 2)
-    plot(Dspa, asp = 1, pch = 21, cex = 3*Dabu$CHA / max(Dabu$CHA), bg = 'darkred',
-         main = 'Bullhead')
-    lines(Dspa, col = 'steelblue', lwd = 2)
-    arrows(25, 133, 94, 45, code = 3, lwd = 7, col = 'darkorange')
-    text(30, 70, '?', cex = 2, col = 'darkorange')
-    plot(Dspa, asp = 1, pch = 21, cex = 3*Dabu$OMB / max(Dabu$OMB), bg = 'darkred',
-         main = 'Grayling')
-    lines(Dspa, col = 'steelblue', lwd = 2)
-    arrows(25, 133, 94, 45, code = 3, lwd = 7, col = 'darkorange')
-    text(30, 70, '?', cex = 2, col = 'darkorange')
+par(mfrow = c(2, 2))
+plot(Dspa, asp = 1, pch = 21, cex = 3*Dabu$TRU / max(Dabu$TRU), bg = 'darkred',
+     main = 'Brown trout')
+lines(Dspa, col = 'steelblue', lwd = 2)
+plot(Dspa, asp = 1, pch = 21, cex = 3*Dabu$BCO / max(Dabu$BCO), bg = 'darkred',
+     main = 'Bream')
+lines(Dspa, col = 'steelblue', lwd = 2)
+plot(Dspa, asp = 1, pch = 21, cex = 3*Dabu$CHA / max(Dabu$CHA), bg = 'darkred',
+     main = 'Bullhead')
+lines(Dspa, col = 'steelblue', lwd = 2)
+arrows(25, 133, 94, 45, code = 3, lwd = 7, col = 'darkorange')
+text(30, 70, '?', cex = 2, col = 'darkorange')
+plot(Dspa, asp = 1, pch = 21, cex = 3*Dabu$OMB / max(Dabu$OMB), bg = 'darkred',
+     main = 'Grayling')
+lines(Dspa, col = 'steelblue', lwd = 2)
+arrows(25, 133, 94, 45, code = 3, lwd = 7, col = 'darkorange')
+text(30, 70, '?', cex = 2, col = 'darkorange')
 
 ### -----------
 ### (Dis-) Similarity measures
@@ -219,3 +219,37 @@ text(wascores(PCOA_bc, dummy[ , -1]), col = 'red', labels = colnames(dummy)[-1])
 # Plot NMDS with Bray-Curtis distance
 NMDS_bc <- metaMDS(dummy[ , -1], trace = 0)
 plot(NMDS_bc, type = 'text', main = 'NMDS, bc')
+# PCoA of fish community data
+Dabu_dist <- vegdist(Dabu, method = 'bray')
+PCOA <- cmdscale(Dabu_dist, eig = TRUE)
+plot(PCOA$points, type = 'n', 
+     xlab = 'PCOA1', ylab = 'PCOA2', main = 'PCoA of fish community data')
+text(PCOA$points, 
+     labels = rownames(Dabu), cex = 0.9)
+wa <- wascores(PCOA$points, Dabu)
+text(wa, labels = colnames(Dabu), 
+     col = 'red', cex = 0.7)
+abline(h = 0 , lty = 'dotted')
+abline(v = 0 , lty = 'dotted')
+
+# Superimpose Altitude to PCoA ordianation (displayed as point size)
+plot(PCOA$points,
+     xlab = 'PCOA1', ylab = 'PCOA2', 
+     cex = 4*Denv$alt / max(Denv$alt),
+     main = 'PCoA with Alt superimposed')
+wa <- wascores(PCOA$points, Dabu)
+text(wa, labels = colnames(Dabu), 
+     col = 'red', cex = 0.7)
+abline(h = 0 , lty = 'dotted')
+abline(v = 0 , lty = 'dotted')
+# PCoA of fish community data
+plot(PCOA$points,
+     xlab = 'PCOA1', ylab = 'PCOA2', 
+     cex = 4*Denv$alt / max(Denv$alt),
+     main = 'PCoA with Alt superimposed')
+abline(h = 0 , lty = 'dotted')
+abline(v = 0 , lty = 'dotted')
+
+ef <- envfit(PCOA, Denv[ ,2, drop = FALSE])
+plot(ef)
+os <- ordisurf(PCOA, Denv$alt, add = TRUE)
