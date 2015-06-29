@@ -4,7 +4,7 @@ Workshop: "Data analysis in freshwater ecology using R" @SEFS9
 This is the GitHub repository for the workshop  "Data analysis in freshwater ecology using R" held at the [9th Symposium for European Freshwater Sciences 2015](http://www.sefs9.ch/?page_id=1480).
 
 * Date:   Sunday, **July 5th 2015**
-* Time: **9:00  - 17:00 ** 
+* Time: **9.00 - 17.00** 
 * Location:  Room **R160** on the ground floor of the Conference Center.
 
 
@@ -36,7 +36,7 @@ install.packages(c("vegan", "rgl"))
 
 ### Downloading code and data
 
-1. [Klick here](https://github.com/EDiLD/sefs9_Rworkshop/archive/master.zip)) to download all the material.
+1. [Klick here](https://github.com/EDiLD/sefs9_Rworkshop/archive/master.zip) to download all the material.
 2. Unzip the file - The unzipped folder contains all files and folders of this online repository.
 
 
@@ -46,7 +46,7 @@ The course is structured into four parts of roughly 1.5 hours:
 
 * A general Introduction to R
 * Linear and Generalized Linear Models (Ralf B. Schäfer)
-* Ordinations (Eduard Szöcs)
+* [Ordinations (Eduard Szöcs)](https://github.com/EDiLD/sefs9_Rworkshop/tree/master/3-Ordination)
 * Spatial data analysis (Avit Kumar Bhowmik)
 
 Each part has its own folder, with slides, data, code and other materials.
