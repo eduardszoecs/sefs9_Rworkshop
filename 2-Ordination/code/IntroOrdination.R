@@ -12,7 +12,8 @@ head(Dabu[ , 1:18])
 # Dimension and first rows of Environmental data
 dim(Denv)
 head(Denv)
-### ----- Data sets ------------------------------------------------------------
+### ----------------------------------------------------------------------------
+### Datasets
 ### ---------------
 ### Melbourne data
 # setwd('3-Ordination/data/')
@@ -31,14 +32,14 @@ head(env[ , 1:10])
 dummy <- read.table('dummydata.csv', header = TRUE, sep = ';')
 # plot dummy data
 matplot(dummy[ , -1], type = 'l', xlab = 'Site', ylab = 'Abundance', 
-        lty = 'solid', lwd = 2)
+        lty = 'solid', lwd = 2, col = 1:9)
 legend('topright', legend = colnames(dummy)[-1],
-        col = 1:3, lty = 'solid', lwd = 2)
+        col = 1:9, lty = 'solid', lwd = 2)
 
 
 
 ### ----------------------------------------------------------------------------
-### Unconstrained Ordination
+### Indirect Gradient Analysis
 
 ### ----------
 # Slide 12 - plot environmental variables along doubs river
@@ -217,11 +218,19 @@ text(PCOA_bc, labels = dummy$Site)
 text(wascores(PCOA_bc, dummy[ , -1]), col = 'red', labels = colnames(dummy)[-1])
 
 # Plot NMDS with Bray-Curtis distance
+set.seed(1234)
 NMDS_bc <- metaMDS(dummy[ , -1], trace = 0)
 plot(NMDS_bc, type = 'text', main = 'NMDS, bc')
+
+
+### -----------------------------------------------------------------------------
+### Indirect Gradient Analysis
+
 # PCoA of fish community data
 Dabu_dist <- vegdist(Dabu, method = 'bray')
 PCOA <- cmdscale(Dabu_dist, eig = TRUE)
+
+# plot PCoA
 plot(PCOA$points, type = 'n', 
      xlab = 'PCOA1', ylab = 'PCOA2', main = 'PCoA of fish community data')
 text(PCOA$points, 
@@ -232,24 +241,45 @@ text(wa, labels = colnames(Dabu),
 abline(h = 0 , lty = 'dotted')
 abline(v = 0 , lty = 'dotted')
 
-# Superimpose Altitude to PCoA ordianation (displayed as point size)
+# Plot PCoA with Superimposed Altitude (displayed as point size)
 plot(PCOA$points,
      xlab = 'PCOA1', ylab = 'PCOA2', 
-     cex = 4*Denv$alt / max(Denv$alt),
-     main = 'PCoA with Alt superimposed')
+     cex = 5*Denv$alt / max(Denv$alt),
+     main = 'PCoA with Altitude superimposed', 
+     bg = 'grey75', pch = 21)
 wa <- wascores(PCOA$points, Dabu)
 text(wa, labels = colnames(Dabu), 
      col = 'red', cex = 0.7)
 abline(h = 0 , lty = 'dotted')
 abline(v = 0 , lty = 'dotted')
-# PCoA of fish community data
+
+# Plot PCoA with Superimposed Altitude (displayed as point size)
 plot(PCOA$points,
      xlab = 'PCOA1', ylab = 'PCOA2', 
-     cex = 4*Denv$alt / max(Denv$alt),
-     main = 'PCoA with Alt superimposed')
+     cex = 5*Denv$alt / max(Denv$alt),
+     main = 'PCoA with Altitude superimposed', 
+     bg = 'grey75', pch = 21)
 abline(h = 0 , lty = 'dotted')
 abline(v = 0 , lty = 'dotted')
 
-ef <- envfit(PCOA, Denv[ ,2, drop = FALSE])
+# Fit Altitude to site-scores
+ef <- envfit(PCOA, Denv)
 plot(ef)
-os <- ordisurf(PCOA, Denv$alt, add = TRUE)
+# summary with R^2 and permutation tests
+ef
+
+# Fit Generalized Additive Model to ordination
+ordisurf(PCOA, Denv$alt, add = TRUE)
+### ----------------------------------------------------------------------------
+### Indirect Gradient Analysis
+### ----------
+### RDA
+RDA <- rda(Dabu ~ ., data = Denv, scale = TRUE)
+plot(RDA, scaling = 3)
+# summary
+summary(RDA)
+# * Partitioning of variance (constrained / unconstrained)
+# * Explained variance
+# * RDA axes: Variance explained by the model 
+# * PCA axes: variance in the residuals (=PCA on residuals)
+# * fairly high amount of residual variance

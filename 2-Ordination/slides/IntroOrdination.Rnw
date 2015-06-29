@@ -10,7 +10,7 @@
 \usetheme{default}
 \useoutertheme[subsection=false]{miniframes}
 
-% move navigation to footer
+% move index to footer
 \setbeamertemplate{headline}{\hfill%
   \raisebox{-5mm}[0pt][0pt]{
     \insertframenumber\,/\,\inserttotalframenumber\kern1em}
@@ -69,13 +69,14 @@
 %%% ----------------------------------------------------------------------------
 \begin{document}
 <<r setup, echo = FALSE, results = 'hide', message = FALSE, purl=FALSE>>=
+library(knitr)
 knitr::opts_chunk$set(comment = NA, fig.align = "center",
                       out.width = "0.7\\linewidth",
                       echo = TRUE, message = FALSE, warning = TRUE,
                       cache = TRUE, size = 'footnotesize'
                       )
-knitr:::opts_knit$set(root.dir = '/home/edisz/Documents/Uni/Projects/PHD/CONFERENCES/SEFS9_Geneva/3-Ordination/data/')
-# setwd('/home/edisz/Documents/Uni/Projects/PHD/CONFERENCES/SEFS9_Geneva/3-Ordination/data/')
+knitr:::opts_knit$set(root.dir = '/home/edisz/Documents/Uni/Projects/PHD/CONFERENCES/SEFS9_Geneva/2-Ordination/data/')
+# setwd('/home/edisz/Documents/Uni/Projects/PHD/CONFERENCES/SEFS9_Geneva/2-Ordination/data/')
 @
 
 
@@ -106,7 +107,7 @@ knitr:::opts_knit$set(root.dir = '/home/edisz/Documents/Uni/Projects/PHD/CONFERE
   }
   \vspace{2em}
   \begin{center}
-  No maths today ;)
+  (Nearly) no maths today ;)
   \end{center}
 
 \end{frame}
@@ -200,9 +201,9 @@ head(Denv)
 @
 \end{frame}
 
-\subsection{Salinization and Pestices}
+\subsection{Salinization and Pesticides}
 \begin{frame}
-\frametitle{Exercise: Salinization and Pestices}
+\frametitle{Exercise: Salinization and Pesticides}
 \begin{columns}
   \begin{column}{0.4\textwidth}
     \includegraphics[width = \textwidth]{fig/testmap.pdf}
@@ -230,9 +231,10 @@ head(Denv)
 
 \subsection{}
 \begin{frame}[fragile]
-\frametitle{Exercise: Salinization and Pestices}
+\frametitle{Exercise: Salinization and Pesticides}
 <<echo=FALSE>>=
-### ----- Data sets ------------------------------------------------------------
+### ----------------------------------------------------------------------------
+### Datasets
 ### ---------------
 ### Melbourne data
 @
@@ -275,19 +277,19 @@ head(env[ , 1:10])
 dummy <- read.table('dummydata.csv', header = TRUE, sep = ';')
 # plot dummy data
 matplot(dummy[ , -1], type = 'l', xlab = 'Site', ylab = 'Abundance', 
-        lty = 'solid', lwd = 2)
+        lty = 'solid', lwd = 2, col = 1:9)
 legend('topright', legend = colnames(dummy)[-1],
-        col = 1:3, lty = 'solid', lwd = 2)
+        col = 1:9, lty = 'solid', lwd = 2)
 @
 \end{frame}
 
 
 
 %%% ----------------------------------------------------------------------------
-\section{Unconstrained Ordination}
+\section{Indirect Gradient Analysis}
 \begin{frame}[plain]{}
 \begin{center}
-  \Huge \color{title} Unconstrained Ordination \\
+  \Huge \color{title} Indirect Gradient Analysis   \\
   \vspace{4em}
   \normalsize
   Principal Components Analysis (PCA) \\ 
@@ -308,7 +310,7 @@ legend('topright', legend = colnames(dummy)[-1],
 
 
 ### ----------------------------------------------------------------------------
-### Unconstrained Ordination
+### Indirect Gradient Analysis
 
 ### ----------
 # Slide 12 - plot environmental variables along doubs river
@@ -639,8 +641,8 @@ biplot(PCA, scaling = 3)
   \color{hilight}{Problem:}
     \begin{itemize}
       \item Only 24 sites
-      \item but 22 (partly correlated) explanatory variables
-      \item strongy hypotheses about salinity and pesticides
+      \item but 22 (potentially correlated) explanatory variables
+      \item strong hypotheses about salinity and pesticides
     \end{itemize}
   \color{hilight}{A Solution:}
   \pause
@@ -735,12 +737,13 @@ text(30, 70, '?', cex = 2, col = 'darkorange')
 
 # Example with dummy data (3 sites, 3 species)
 @
-  <<echo = FALSE>>=
-  mat <- matrix(c(0, 4, 8, 0, 1, 1, 1, 0, 0), nrow = 3, byrow = TRUE)
-  colnames(mat) <- c('Spe1', 'Spe2', 'Spe3')
-  rownames(mat) <- c('sit1', 'sit2', 'sit3')
-  mat
-  @
+
+<<echo = FALSE>>=
+mat <- matrix(c(0, 4, 8, 0, 1, 1, 1, 0, 0), nrow = 3, byrow = TRUE)
+colnames(mat) <- c('Spe1', 'Spe2', 'Spe3')
+rownames(mat) <- c('sit1', 'sit2', 'sit3')
+mat
+@
   \begin{columns}
     \begin{column}{0.5\textwidth}
 <<echo=FALSE>>=
@@ -762,7 +765,7 @@ vegdist(mat, method = 'bray')
     \end{column}
   \end{columns}
   \end{TINY}
-\blfootnote{\color{gray} \footnotesize Anderson, M.J., Crist, T.O., et al. , 2011. Navigating the multiple meanings of beta diversity: a roadmap for the practicing ecologist. Ecology Letters 14, 19–28.}
+\blfootnote{\color{gray} \footnotesize from: Anderson, M.J., Crist, T.O., et al. , 2011. Navigating the multiple meanings of beta diversity: a roadmap for the practicing ecologist. Ecology Letters 14, 19–28.}
 \end{frame}
 
 
@@ -859,7 +862,7 @@ text(wa, labels = colnames(Dabu),
     \item Similar to PCoA
     \item Does not preserve exact distances between objects
     \item Possibly better representation in low dimensions
-    \item \textbf{Not} eiegnvalue based, iterative algorithm
+    \item \textbf{Not} eigenvalue based, iterative algorithm
     \item Axes have no meaning, just the relative distances
   \end{itemize}
 \end{frame}
@@ -950,7 +953,7 @@ NMDS$stress
     \item PCoA with Bray-Curtis dissimilarity
     \item NMDS with Bray-Curtis dissimilarity
   \end{enumerate}
-  
+  \vspace{1em}
   What are the differences between ordinations? \\
   Which represent better the underlying gradient?
   
@@ -988,6 +991,7 @@ text(PCOA_bc, labels = dummy$Site)
 text(wascores(PCOA_bc, dummy[ , -1]), col = 'red', labels = colnames(dummy)[-1])
 
 # Plot NMDS with Bray-Curtis distance
+set.seed(1234)
 NMDS_bc <- metaMDS(dummy[ , -1], trace = 0)
 plot(NMDS_bc, type = 'text', main = 'NMDS, bc')
 @
@@ -1000,9 +1004,9 @@ plot(NMDS_bc, type = 'text', main = 'NMDS, bc')
 
 
 %%% ----------------------------------------------------------------------------
-\subsection{Indirect Gradient Analysis}
+\subsection{Fit environmantal variables}
 \begin{frame}[fragile]
-\frametitle{Indirect Gradient Analysis}
+\frametitle{Fit environmental variables to ordination (I)}
 \begin{columns}[t]
   \begin{column}{0.5\textwidth}
     \begin{itemize}
@@ -1012,7 +1016,7 @@ plot(NMDS_bc, type = 'text', main = 'NMDS, bc')
     \begin{itemize}
       \item<1-> How can we interpret the gradients in community composition?
     \end{itemize}
-    \color{hilight}{A solution}
+    \color{hilight}{A solution:}
     \begin{itemize}
       \item<2-> Superimpose environmental variables
     \end{itemize}
@@ -1020,9 +1024,16 @@ plot(NMDS_bc, type = 'text', main = 'NMDS, bc')
   \begin{column}{0.5\textwidth}
 \only<1>{
 <<pcoa_plot5, warning=FALSE, echo = FALSE, out.width='\\textwidth', results = 'hide'>>=
+
+
+### -----------------------------------------------------------------------------
+### Indirect Gradient Analysis
+
 # PCoA of fish community data
 Dabu_dist <- vegdist(Dabu, method = 'bray')
 PCOA <- cmdscale(Dabu_dist, eig = TRUE)
+
+# plot PCoA
 plot(PCOA$points, type = 'n', 
      xlab = 'PCOA1', ylab = 'PCOA2', main = 'PCoA of fish community data')
 text(PCOA$points, 
@@ -1038,11 +1049,12 @@ abline(v = 0 , lty = 'dotted')
 \visible<2->{
 <<envfit2, warning=FALSE, echo = FALSE, out.width='\\textwidth', results = 'hide'>>=
 
-# Superimpose Altitude to PCoA ordianation (displayed as point size)
+# Plot PCoA with Superimposed Altitude (displayed as point size)
 plot(PCOA$points,
      xlab = 'PCOA1', ylab = 'PCOA2', 
-     cex = 4*Denv$alt / max(Denv$alt),
-     main = 'PCoA with Alt superimposed')
+     cex = 5*Denv$alt / max(Denv$alt),
+     main = 'PCoA with Altitude superimposed', 
+     bg = 'grey75', pch = 21)
 wa <- wascores(PCOA$points, Dabu)
 text(wa, labels = colnames(Dabu), 
      col = 'red', cex = 0.7)
@@ -1056,24 +1068,74 @@ abline(v = 0 , lty = 'dotted')
 
 \subsection{}
 \begin{frame}[fragile]
-\frametitle{Indirect Gradient Analysis}
+\frametitle{Fit environmental variables to ordination (II)}
 \begin{columns}[t]
   \begin{column}{0.5\textwidth}
-  \end{column}
-  \begin{column}{0.5\textwidth}
-<<pcoa_plot6, warning=FALSE, echo = FALSE, out.width='\\textwidth', results = 'hide'>>=
+<<pcoa_plot6a, warning=FALSE, purl=FALSE, eval=FALSE>>=
 # PCoA of fish community data
 plot(PCOA$points,
      xlab = 'PCOA1', ylab = 'PCOA2', 
-     cex = 4*Denv$alt / max(Denv$alt),
-     main = 'PCoA with Alt superimposed')
+     cex = 5*Denv$alt / max(Denv$alt),
+     main = 'PCoA with Altitude', 
+     bg = 'grey75', pch = 21)
 abline(h = 0 , lty = 'dotted')
 abline(v = 0 , lty = 'dotted')
 
-ef <- envfit(PCOA, Denv[ ,2, drop = FALSE])
+# Fit Altitude to site-scores
+ef <- envfit(PCOA, Denv)
 plot(ef)
-os <- ordisurf(PCOA, Denv$alt, add = TRUE)
+ef   # summary
+
+# Fit GAM
+ordisurf(PCOA, Denv$alt, add = TRUE)
 @
+\begin{itemize}
+  \item \emph{Post hoc} method
+  \item<1-> non-linearity?
+  \item<2-> be careful with \texttt{summary}
+  \item<2-> Constrained ordination a better alternative
+\end{itemize}
+  \end{column}
+  
+  \begin{column}{0.5\textwidth}
+\only<1>{
+<<pcoa_plot6, warning=FALSE, echo = FALSE, purl = FALSE, out.width='\\textwidth', results = 'hide'>>=
+# PCoA of fish community data
+plot(PCOA$points,
+     xlab = 'PCOA1', ylab = 'PCOA2', 
+     cex = 5*Denv$alt / max(Denv$alt),
+     main = 'PCoA with Altitude superimposed', 
+     bg = 'grey75', pch = 21)
+abline(h = 0 , lty = 'dotted')
+abline(v = 0 , lty = 'dotted')
+
+# Fit Altitude to site-scores
+ef <- envfit(PCOA, Denv)
+plot(ef)
+@
+}
+\visible<2->{
+<<pcoa_plot7, warning=FALSE, echo = FALSE, purl = TRUE, out.width='\\textwidth', results = 'hide'>>=
+
+# Plot PCoA with Superimposed Altitude (displayed as point size)
+plot(PCOA$points,
+     xlab = 'PCOA1', ylab = 'PCOA2', 
+     cex = 5*Denv$alt / max(Denv$alt),
+     main = 'PCoA with Altitude superimposed', 
+     bg = 'grey75', pch = 21)
+abline(h = 0 , lty = 'dotted')
+abline(v = 0 , lty = 'dotted')
+
+# Fit Altitude to site-scores
+ef <- envfit(PCOA, Denv)
+plot(ef)
+# summary with R^2 and permutation tests
+ef
+
+# Fit Generalized Additive Model to ordination
+ordisurf(PCOA, Denv$alt, add = TRUE)
+@
+}
 
   \end{column}
 \end{columns}
@@ -1081,38 +1143,190 @@ os <- ordisurf(PCOA, Denv$alt, add = TRUE)
 
 
 
-\subsection{Your turn!}
-\bgroup
-\setbeamercolor{background canvas}{bg=title}
-\begin{frame}[plain]{}
-\begin{center}
-  \color{background}
-  \Huge \textbf{Your turn}! \\[1em]
-  \large
-  Using the melbourne data. \\
-\end{center}
-\end{frame}
-\egroup
+%' \subsection{Your turn!}
+%' \bgroup
+%' \setbeamercolor{background canvas}{bg=title}
+%' \begin{frame}[plain]{}
+%' \begin{center}
+%'   \color{background}
+%'   \Huge \textbf{Your turn}! \\[1em]
+%'   \large
+%'   Using the melbourne data. \\[1em]
+%' \begin{enumerate}
+%'   \color{white}
+%'   \item Run a PCoA on the invertebrate dataset (abu)
+%'   \item Fit \texttt{logmaxTU} and \texttt{logCond} to the resulting ordination.
+%'   \item What variable
+%' \end{enumerate}
+%' 
+%'   
+%' \end{center}
+%' \end{frame}
+%' \egroup
+%' 
+%' 
+%' 
+%' \begin{frame}[fragile]
+%' \frametitle{Exercise}
+%' \begin{columns}
+%'   \begin{column}{0.7\textwidth}
+%'   
+%' <<echo=FALSE>>=
+%' 
+%' ### ----------
+%' ### Exercise 3 - Solution
+%' @
+%' 
+%' <<ex3, out.width = '\\textwidth', echo = FALSE>>=
+%' PCOA <- cmdscale(vegdist(abu[ , -1], method = 'bray'), k = 2)
+%' # plot PCoA
+%' plot(PCOA, type = 'n', 
+%'      xlab = 'PCOA1', ylab = 'PCOA2', main = 'PCoA of fish community data')
+%' text(PCOA, labels = rownames(abu), cex = 0.9)
+%' abline(h = 0 , lty = 'dotted')
+%' abline(v = 0 , lty = 'dotted')
+%' ef <- envfit(PCOA, env[ , c('logmaxTU', 'logCond')])
+%' plot(ef)
+%' ef
+%' os1 <- ordisurf(PCOA, env[ , c('logmaxTU')], add = TRUE)
+%' os2 <- ordisurf(PCOA, env[ , c('logCond')], add = TRUE, col = 'green')
+%' @
+%'   \end{column}
+%'   \begin{column}{0.3\textwidth}
+%'     \includegraphics[width = \textwidth]{figure/dummyplot-1.pdf}
+%'   \end{column}
+%' \end{columns}
+%' \end{frame}
 
 
 %%% ----------------------------------------------------------------------------
-\section{Constrained Ordination}
+\section{Direct Gradient Analysis}
 \begin{frame}[plain]{}
 \begin{center}
-  \Huge \color{title} Constrained Ordination
+  \Huge \color{title} Direct Gradient Analysis
 \end{center}
 \end{frame}
 
 
 \subsection{}
 \begin{frame}
-\frametitle{Constrained Ordination}
+\frametitle{Direct Gradient Analysis}
+\begin{columns}
+  \begin{column}{0.4\textwidth}
+  \begin{itemize}
+    \item Redundancy analysis (RDA)
+    \item Transformation-based RDA (tb-RDA)
+    \item Distance-based RDA (db-RDA)
+  \end{itemize}   
+  \end{column}
+  \begin{column}{0.6\textwidth}
+    \includegraphics[width=\textwidth]{fig/rda.png}
+  \end{column}
+\end{columns}
+\blfootnote{\color{gray} \footnotesize Adapted from: Legendre, P., Gallagher, E.D., 2001. Ecologically meaningful transformations for ordination of species data. Oecologia 129, 271–280.}
+\end{frame}
+
+
+\subsection{Redundancy analysis (RDA)}
+\begin{frame}
+\frametitle{Redundancy analysis (RDA)}
 \begin{itemize}
-  \item Redundany analysis (RDA)
-  \item Transformation-based RDA
-  \item Distance-based RDA
+  \item Associates both environmental and community data at once
+  \item Combination of regression and PCA:
+    \begin{enumerate}
+    \item Regress explanatory variables on community data
+    \item Run PCA on fitted values
+  \end{enumerate}
+  \item Can test hypothese about relationships
 \end{itemize}
 \end{frame}
+
+
+\subsection{}
+\begin{frame}[fragile]
+\frametitle{Redundancy analysis (RDA) | How?}
+\begin{columns}
+  \begin{column}{0.5\textwidth}
+<<echo=FALSE>>=
+### ----------------------------------------------------------------------------
+### Indirect Gradient Analysis
+### ----------
+### RDA
+@
+
+<<rda_plot1, message = FALSE, eval = FALSE, purl = FALSE>>=
+RDA <- rda(Dabu ~ ., data = Denv, 
+           scale = TRUE)
+plot(RDA, scaling = 3)
+@
+    \begin{itemize}
+      \item Formula interface
+      \begin{itemize}
+        \item Left side: Response \textbf{matrix}
+        \item Right side: Response variables from \textbf{\texttt{Denv}}
+      \end{itemize}
+    \end{itemize}
+  \end{column}
+  
+  \begin{column}{0.5\textwidth}
+<<rda_plot1a, message = FALSE, echo=FALSE, out.width='1\\textwidth'>>=
+RDA <- rda(Dabu ~ ., data = Denv, scale = TRUE)
+plot(RDA, scaling = 3)
+@
+  \end{column}
+\end{columns}
+\end{frame}
+
+
+\subsection{}
+\begin{frame}[fragile]
+\frametitle{Redundancy analysis (RDA) | Interpretation? (I)}
+\begin{columns}
+  \begin{column}{0.5\textwidth}
+<<rda_plot1b, message = FALSE, echo=FALSE, out.width='1\\textwidth', purl = FALSE>>=
+plot(RDA, scaling = 3)
+@
+  \end{column}
+  
+  \begin{column}{0.5\textwidth}
+\begin{itemize}
+  \item Similar to PCA
+  \item Projecting a site on response or explanatory variable approx. the value
+  \item angles between response and expl. variables approx. their correlations
+\end{itemize}
+
+  \end{column}
+\end{columns}
+\end{frame}
+
+
+\subsection{}
+\begin{frame}[fragile]
+\frametitle{Redundancy analysis (RDA) | Interpretation? (II)}
+<<echo=FALSE>>=
+# summary
+summary(RDA)
+# * Partitioning of variance (constrained / unconstrained)
+# * Explained variance
+# * RDA axes: Variance explained by the model 
+# * PCA axes: variance in the residuals (=PCA on residuals)
+# * fairly high amount of residual variance
+@
+
+<<purl=FALSE>>=
+summary(RDA)
+@
+\end{frame}
+
+
+\subsection{}
+\begin{frame}[fragile]
+\frametitle{transformation-based RDA}
+
+\end{frame}
+
+
+
 
 \subsection{Your turn!}
 \bgroup

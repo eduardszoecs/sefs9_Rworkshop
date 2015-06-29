@@ -44,12 +44,14 @@ install.packages(c("vegan", "rgl"))
 
 The course is structured into four parts of roughly 1.5 hours:
 
-* A general Introduction to R
-* Linear and Generalized Linear Models (Ralf B. Schäfer)
-* [Ordinations (Eduard Szöcs)](https://github.com/EDiLD/sefs9_Rworkshop/tree/master/3-Ordination)
-* Spatial data analysis (Avit Kumar Bhowmik)
+* Linear and Generalized Linear Models (Ralf B. Schäfer) (**9.00 - 11.00**)
+* [Ordinations (Eduard Szöcs)](https://github.com/EDiLD/sefs9_Rworkshop/tree/master/3-Ordination) (**11.15 - 12.15 and 13.15 - 14.45**)
+* Spatial data analysis (Avit Kumar Bhowmik) (**15.00 - 16.45**)
+* Course Evaluation (**16.45 - 17.00**) - see link below.
 
 Each part has its own folder, with slides, data, code and other materials.
+Each lecture is structured in: Intro - Demo - Exercise
+
 
 ## Feedback
 
