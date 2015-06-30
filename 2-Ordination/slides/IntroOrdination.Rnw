@@ -77,6 +77,41 @@ knitr::opts_chunk$set(comment = NA, fig.align = "center",
                       )
 knitr:::opts_knit$set(root.dir = '/home/edisz/Documents/Uni/Projects/PHD/CONFERENCES/SEFS9_Geneva/2-Ordination/data/')
 # setwd('/home/edisz/Documents/Uni/Projects/PHD/CONFERENCES/SEFS9_Geneva/2-Ordination/data/')
+
+# custom hook to display only selected lines
+# source: http://stackoverflow.com/questions/23114654/knitr-output-hook-with-an-output-lines-option-that-works-like-echo-26
+# output.lines=4 => display only first 4 lines
+# knitr hook function to allow an output.lines option
+# e.g., 
+#   output.lines=12 prints lines 1:12 ...
+#   output.lines=1:12 does the same
+#   output.lines=3:15 prints lines ... 3:15 ...
+#   output.lines=-(1:8) removes lines 1:8 and prints ... 9:n ...
+#   No allowance for anything but a consecutive range of lines
+
+hook_output <- knit_hooks$get("output")
+knit_hooks$set(output = function(x, options) {
+   lines <- options$output.lines
+   if (is.null(lines)) {
+     return(hook_output(x, options))  # pass to default hook
+   }
+   x <- unlist(strsplit(x, "\n"))
+   more <- "..."
+   if (length(lines)==1) {        # first n lines
+     if (length(x) > lines) {
+       # truncate the output, but add ....
+       x <- c(head(x, lines), more)
+     }
+   } else {
+     x <- c(if (abs(lines[1])>1) more else NULL, 
+            x[lines], 
+            if (length(x)>lines[abs(length(lines))]) more else NULL
+           )
+   }
+   # paste these lines together
+   x <- paste(c(x, ""), collapse = "\n")
+   hook_output(x, options)
+ })
 @
 
 
@@ -724,11 +759,7 @@ text(30, 70, '?', cex = 2, col = 'darkorange')
 
 \subsection{}
 \begin{frame}[fragile]
-\frametitle{Dissimilarity measures}
-  \begin{center}
-  \includegraphics[width=0.8\textwidth]{fig/Anderson_2011.png}
-  \end{center}
-  \pause
+\frametitle{Dissimilarity measures | Species abundance paradox}
   \begin{TINY}
 <<echo=FALSE>>=
 
@@ -765,6 +796,11 @@ vegdist(mat, method = 'bray')
     \end{column}
   \end{columns}
   \end{TINY}
+  \pause
+  \begin{center}
+    \includegraphics[width=0.8\textwidth]{fig/Anderson_2011.png}
+  \end{center}
+
 \blfootnote{\color{gray} \footnotesize from: Anderson, M.J., Crist, T.O., et al. , 2011. Navigating the multiple meanings of beta diversity: a roadmap for the practicing ecologist. Ecology Letters 14, 19–28.}
 \end{frame}
 
@@ -1026,6 +1062,7 @@ plot(NMDS_bc, type = 'text', main = 'NMDS, bc')
 <<pcoa_plot5, warning=FALSE, echo = FALSE, out.width='\\textwidth', results = 'hide'>>=
 
 
+
 ### -----------------------------------------------------------------------------
 ### Indirect Gradient Analysis
 
@@ -1248,8 +1285,11 @@ ordisurf(PCOA, Denv$alt, add = TRUE)
 \begin{columns}
   \begin{column}{0.5\textwidth}
 <<echo=FALSE>>=
+
+
+
 ### ----------------------------------------------------------------------------
-### Indirect Gradient Analysis
+### Direct Gradient Analysis
 ### ----------
 ### RDA
 @
@@ -1291,8 +1331,8 @@ plot(RDA, scaling = 3)
   \begin{column}{0.5\textwidth}
 \begin{itemize}
   \item Similar to PCA
-  \item Projecting a site on response or explanatory variable approx. the value
-  \item angles between response and expl. variables approx. their correlations
+  \item Projecting a site on response or explanatory variable \textbf{approx.} the value
+  \item angles between response and expl. variables \textbf{approx.} their correlations
 \end{itemize}
 
   \end{column}
@@ -1303,7 +1343,8 @@ plot(RDA, scaling = 3)
 \subsection{}
 \begin{frame}[fragile]
 \frametitle{Redundancy analysis (RDA) | Interpretation? (II)}
-<<echo=FALSE>>=
+<<echo=FALSE, output.lines = 5:21>>=
+
 # summary
 summary(RDA)
 # * Partitioning of variance (constrained / unconstrained)
@@ -1313,19 +1354,163 @@ summary(RDA)
 # * fairly high amount of residual variance
 @
 
-<<purl=FALSE>>=
-summary(RDA)
+\end{frame}
+
+
+\subsection{tb-RDA}
+\begin{frame}[fragile]
+\frametitle{transformation-based RDA}
+\begin{itemize}
+  \item RDA (as PCA) preserves the euclidean distance.
+\end{itemize}
+
+\begin{center}
+\color{hilight}{What about the species abundance paradox?}
+\end{center}
+
+\pause
+\begin{itemize}
+  \item Can transform data to use with euclidean distance
+  \begin{itemize}
+    \item Remove differences in total abundance, while keeping the variations relative abundance 
+  \end{itemize}
+  \item Chord and Hellinger transformations useful.
+\end{itemize}
+
+
+\begin{columns}
+  \begin{column}{0.5\textwidth}
+  Hellinger: 
+    $$y'_{ij} = \sqrt{\frac{y_{ij}}{y_{i+}}}$$
+  \end{column}
+  \begin{column}{0.5\textwidth}
+<<echo=FALSE>>=
+
+### ----------
+### Transformations
+
 @
+
+
+<<>>=
+mat
+decostand(mat, 'hellinger')
+@
+  \end{column}
+\end{columns}
+
+\blfootnote{\color{gray} \footnotesize Legendre, P., Gallagher, E.D., 2001. Ecologically meaningful transformations for ordination of species data. Oecologia 129, 271–280.}
 \end{frame}
 
 
 \subsection{}
 \begin{frame}[fragile]
 \frametitle{transformation-based RDA}
+\begin{columns}[t]
+    \begin{column}{0.55\textwidth}
+<<echo=FALSE>>=
 
+
+### ----------
+### transformation-based RDA (tb-RDA)
+
+@
+
+<<tbRDA1, warning=FALSE, eval = FALSE, message=FALSE, purl = FALSE>>=
+# Hellinger transformation
+Dabu_h <- decostand(Dabu, 'hellinger')
+# RDA on Hellinger transformed abundances
+tbRDA <- rda(Dabu_h ~ ., data = Denv)
+
+# Plot
+plot(tbRDA, type = 't')
+@
+
+\visible<2->{
+\begin{itemize}
+  \item \texttt{alt}, \texttt{oxy} and nutrients important
+  \item Trout (TRU) and minow (VAI) found at high sites with high oxygen
+  \item Bleak (ABL) is found a low oxygen and high nutrients
+  \item Other species in similar environments
+\end{itemize}
+}
+
+    \end{column}
+    \begin{column}{0.45\textwidth}
+<<tbRA2, warning=FALSE, echo = FALSE, out.width='1.2\\textwidth', message=FALSE, results = 'hide'>>=
+# Hellinger transformation
+Dabu_h <- decostand(Dabu, 'hellinger')
+# RDA on Hellinger transformed abundances
+tbRDA <- rda(Dabu_h ~ ., data = Denv)
+# no additional scaling!
+
+# Plot
+plot(tbRDA, type = 't')
+@
+
+    \end{column}
+  \end{columns}
 \end{frame}
 
 
+
+
+\subsection{db-RDA}
+\begin{frame}[fragile]
+\frametitle{distance-based RDA}
+  \begin{itemize}
+    \item db-RDA is a related method
+    \item hellinger transformation can also be expressed as distance matrix
+    \item \emph{Constained PCoA}
+    \item Can use every distance metric
+  \end{itemize}
+  \includegraphics[width=0.7\textwidth]{fig/dbrda.png}
+\blfootnote{\color{gray} \footnotesize modified from: Legendre, P., Gallagher, E.D., 2001. Ecologically meaningful transformations for ordination of species data. Oecologia 129, 271–280.}
+\end{frame}
+
+
+\subsection{}
+\begin{frame}[fragile]
+\frametitle{distance-based RDA}
+\begin{columns}[t]
+    \begin{column}{0.55\textwidth}
+<<echo=FALSE>>=
+
+
+### ----------
+### distance-based RDA (tb-RDA)
+
+@
+
+<<dbRDA1, warning=FALSE, eval = FALSE, message=FALSE, purl = TRUE, message = FALSE>>=
+# dbRDA
+dbRDA <- capscale(Dabu ~ ., data = Denv, 
+                  distance = 'bray')
+plot(dbRDA, type = 't')
+@
+
+<<dbRDA1a, warning=FALSE, echo = FALSE, message=FALSE, purl = FALSE, message = FALSE>>=
+dbRDA <- capscale(Dabu ~ ., data = Denv, 
+                  distance = 'bray')
+@
+
+<<dbRDA3, warning=FALSE, message=FALSE, output.lines = 6:17>>=
+summary(dbRDA)
+@
+
+    \end{column}
+    \begin{column}{0.45\textwidth}
+<<dbRDA2, warning=FALSE, echo = FALSE, out.width='1.2\\textwidth', message=FALSE, results = 'hide', purl = FALSE>>=
+# db-RDA
+dbRDA <- capscale(Dabu ~ ., data = Denv, distance = 'bray')
+
+# Plot
+plot(dbRDA, type = 't')
+@
+
+    \end{column}
+  \end{columns}
+\end{frame}
 
 
 \subsection{Your turn!}
@@ -1336,10 +1521,86 @@ summary(RDA)
   \color{background}
   \Huge \textbf{Your turn}! \\[1em]
   \large
-  Using the melbourne data. \\
+  Using the artificial dummy dataset and \texttt{Site} as only contraining variable \\[1em]
+  
+  Run:
+  \begin{enumerate}
+  \color{white}
+    \item RDA
+    \item tbRDA (Hellinger)
+    \item dbRDA with Bray-Curtis
+    \item dbRDA with $x^{0.25}$ transformed abundances and Bray-Curtis
+  \end{enumerate}
+  \vspace{1em}
+  What ordination presents best the gradient? \\
+  What method explains most of variance?
+  
 \end{center}
 \end{frame}
 \egroup
+
+
+\subsection{}
+\begin{frame}[fragile]
+\frametitle{Exercise}
+
+See Demo.
+
+<<echo=FALSE, results='hide', fig.keep = 'none'>>=
+
+### ----------
+### Exercise 3 - Solution
+
+# 1 - RDA
+RDA <- rda(dummy[ , -1] ~ Site, data = dummy)
+
+# 2 - tbRDA
+dummy_hel <- decostand(dummy[ , -1], 'hellinger')
+tbRDA <- rda(dummy_hel ~ Site, data = dummy)
+
+# 3 - dbRDA
+dbRDA <- capscale(dummy[ , -1] ~ Site, data = dummy, distance = 'bray')
+dbRDA_t <- capscale(dummy[ , -1]^0.25 ~ Site, data = dummy, distance = 'bray')
+
+# cca
+CCA <- cca(dummy[ , -1] ~ Site, data = dummy)
+
+
+### visual insection
+par(mfrow = c(2,3))
+plot(RDA, main = 'RDA', scaling = 3)
+plot(tbRDA, main = 'tb-RDA', scaling = 3)
+plot(dbRDA, main = 'db-RDA', scaling = 3)
+plot(dbRDA_t, main = 'db-RDA (x^0.25)', scaling = 3)
+plot(CCA, main = 'CCA', scaling = 3)
+
+
+# explained variance
+explvar <- function(x){
+  x$CCA$tot.chi / x$tot.chi
+}
+explvar(RDA)
+explvar(tbRDA)
+explvar(dbRDA)
+explvar(dbRDA_t)
+explvar(CCA)
+
+
+# plot ranks on first axis
+rank_1st <- function(x){
+  rank(scores(x, choices = 1, scaling = 1, display = 'sites'))
+}
+par(mfrow = c(2,3))
+plot(1:19, rank_1st(RDA))
+plot(1:19, rank_1st(tbRDA))
+plot(1:19, rank_1st(dbRDA))
+plot(1:19, rank_1st(dbRDA_t))
+plot(1:19, rank_1st(CCA))
+
+@
+\end{frame}
+
+
 
 
 %%% ----------------------------------------------------------------------------
@@ -1373,6 +1634,7 @@ summary(RDA)
 \begin{itemize}
   \item Distance-based hypothesis testing ((PER-)MANOVA, SIMPER, ANOSIM)
   \item Dispersion measures ($\beta$-Diversity, Functional diversity)
+  \item Consensus RDA, RLQ (traits), ...
   \item Model-based ordination / hypothesis testing (See work of David Warton et al.)
 \end{itemize}
 

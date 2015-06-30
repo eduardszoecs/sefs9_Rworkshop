@@ -223,6 +223,7 @@ NMDS_bc <- metaMDS(dummy[ , -1], trace = 0)
 plot(NMDS_bc, type = 'text', main = 'NMDS, bc')
 
 
+
 ### -----------------------------------------------------------------------------
 ### Indirect Gradient Analysis
 
@@ -270,12 +271,16 @@ ef
 
 # Fit Generalized Additive Model to ordination
 ordisurf(PCOA, Denv$alt, add = TRUE)
+
+
+
 ### ----------------------------------------------------------------------------
-### Indirect Gradient Analysis
+### Direct Gradient Analysis
 ### ----------
 ### RDA
 RDA <- rda(Dabu ~ ., data = Denv, scale = TRUE)
 plot(RDA, scaling = 3)
+
 # summary
 summary(RDA)
 # * Partitioning of variance (constrained / unconstrained)
@@ -283,3 +288,82 @@ summary(RDA)
 # * RDA axes: Variance explained by the model 
 # * PCA axes: variance in the residuals (=PCA on residuals)
 # * fairly high amount of residual variance
+
+### ----------
+### Transformations
+
+mat
+decostand(mat, 'hellinger')
+
+
+### ----------
+### transformation-based RDA (tb-RDA)
+
+# Hellinger transformation
+Dabu_h <- decostand(Dabu, 'hellinger')
+# RDA on Hellinger transformed abundances
+tbRDA <- rda(Dabu_h ~ ., data = Denv)
+# no additional scaling!
+
+# Plot
+plot(tbRDA, type = 't')
+
+
+### ----------
+### distance-based RDA (tb-RDA)
+
+## # dbRDA
+## dbRDA <- capscale(Dabu ~ ., data = Denv,
+##                   distance = 'bray')
+## plot(dbRDA, type = 't')
+summary(dbRDA)
+
+### ----------
+### Exercise 3 - Solution
+
+# 1 - RDA
+RDA <- rda(dummy[ , -1] ~ Site, data = dummy)
+
+# 2 - tbRDA
+dummy_hel <- decostand(dummy[ , -1], 'hellinger')
+tbRDA <- rda(dummy_hel ~ Site, data = dummy)
+
+# 3 - dbRDA
+dbRDA <- capscale(dummy[ , -1] ~ Site, data = dummy, distance = 'bray')
+dbRDA_t <- capscale(dummy[ , -1]^0.25 ~ Site, data = dummy, distance = 'bray')
+
+# cca
+CCA <- cca(dummy[ , -1] ~ Site, data = dummy)
+
+
+### visual insection
+par(mfrow = c(2,3))
+plot(RDA, main = 'RDA', scaling = 3)
+plot(tbRDA, main = 'tb-RDA', scaling = 3)
+plot(dbRDA, main = 'db-RDA', scaling = 3)
+plot(dbRDA_t, main = 'db-RDA (x^0.25)', scaling = 3)
+plot(CCA, main = 'CCA', scaling = 3)
+
+
+# explained variance
+explvar <- function(x){
+  x$CCA$tot.chi / x$tot.chi
+}
+explvar(RDA)
+explvar(tbRDA)
+explvar(dbRDA)
+explvar(dbRDA_t)
+explvar(CCA)
+
+
+# plot ranks on first axis
+rank_1st <- function(x){
+  rank(scores(x, choices = 1, scaling = 1, display = 'sites'))
+}
+par(mfrow = c(2,3))
+plot(1:19, rank_1st(RDA))
+plot(1:19, rank_1st(tbRDA))
+plot(1:19, rank_1st(dbRDA))
+plot(1:19, rank_1st(dbRDA_t))
+plot(1:19, rank_1st(CCA))
+
