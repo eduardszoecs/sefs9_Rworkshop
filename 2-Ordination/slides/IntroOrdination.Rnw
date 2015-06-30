@@ -321,10 +321,10 @@ legend('topright', legend = colnames(dummy)[-1],
 
 
 %%% ----------------------------------------------------------------------------
-\section{Indirect Gradient Analysis}
+\section{Unconstrained Ordination}
 \begin{frame}[plain]{}
 \begin{center}
-  \Huge \color{title} Indirect Gradient Analysis   \\
+  \Huge \color{title} Unconstrained Ordination   \\
   \vspace{4em}
   \normalsize
   Principal Components Analysis (PCA) \\ 
@@ -1237,17 +1237,17 @@ ordisurf(PCOA, Denv$alt, add = TRUE)
 
 
 %%% ----------------------------------------------------------------------------
-\section{Direct Gradient Analysis}
+\section{Constrained Ordination}
 \begin{frame}[plain]{}
 \begin{center}
-  \Huge \color{title} Direct Gradient Analysis
+  \Huge \color{title} Constrained Ordination
 \end{center}
 \end{frame}
 
 
 \subsection{}
 \begin{frame}
-\frametitle{Direct Gradient Analysis}
+\frametitle{Constrained Ordination}
 \begin{columns}
   \begin{column}{0.4\textwidth}
   \begin{itemize}
