@@ -47,7 +47,7 @@
 
 
 %%% ----- Metadata -------------------------------------------------------------
-\title{A (brief) introduction to ordination and the vegan package}
+\title{A (short) introduction to ordination with the vegan package}
 \date{SEFS9, July 5th 2015}
 \author{Eduard Szöcs}
 \institute{Institute for Environmental Sciences - University of Koblenz-Landau \\[1em] 
@@ -1381,7 +1381,7 @@ summary(RDA)
 \begin{columns}
   \begin{column}{0.5\textwidth}
   Hellinger: 
-    $$y'_{ij} = \sqrt{\frac{y_{ij}}{y_{i+}}}$$
+    $$y'_{ij} = \sqrt{\frac{y_{ij}}{\sum\limits_{j=1}^p {y_{ij}}}}$$
   \end{column}
   \begin{column}{0.5\textwidth}
 <<echo=FALSE>>=
@@ -1604,42 +1604,206 @@ plot(1:19, rank_1st(CCA))
 
 
 %%% ----------------------------------------------------------------------------
-\section{Permutation Tests}
+\section{Model diagnostics / testing}
+
 \begin{frame}[plain]{}
 \begin{center}
-  \Huge \color{title} Permutation Tests
+  \Huge \color{title} Model diagnostics and testing
 \end{center}
 \end{frame}
 
 
-\subsection{Your turn!}
+\subsection{Collinearity}
+\begin{frame}[fragile]
+\frametitle{Collinearity}
+\begin{itemize}
+  \item RDA et al. are \emph{regression methods} - everything you know applies also here
+  \item Collinearity of predictors may lead to wrong conclusions.
+  \item Many methods available (see ref.), also use your \emph{ecological knowledge}!
+\end{itemize}
+
+\begin{columns}[t]
+  \begin{column}{0.5\textwidth}
+<<echo=FALSE>>=
+
+
+### ----------------------------------------------------------------------------
+### Model building / diagnostics / testing 
+
+@
+<<results='hold', out.width='\\textwidth'>>=
+# visual inspetion via PCA
+biplot(rda(Denv, scale = TRUE), 
+       display = 'species', scaling = 2)
+@
+  \end{column}
+  \begin{column}{0.5\textwidth}
+\pause
+<<tidy = TRUE>>=
+# RDA on Hellinger transformed abundances
+tbRDA <- rda(decostand(Dabu, 'hellinger') ~ ., data = Denv)
+# Variance inflation factors
+vif.cca(tbRDA)
+@
+
+\begin{itemize}
+  \item VIF \textgreater 20 : strong collonearity
+  \item VIF \textgreater 10 : potential problems
+\end{itemize}
+
+  \end{column}
+\end{columns}
+\blfootnote{\color{gray} \footnotesize Dormann, C.F., et al., 2013. Collinearity: a review of methods to deal with it and a simulation study evaluating their performance. Ecography 36, 027–046.}
+\end{frame}
+
+
+\subsection{Diagnostics}
+\begin{frame}[fragile]
+\frametitle{Goodness of fit}
+  \begin{itemize}
+    \item \texttt{goodness()} returns the cumulative proportion of variance explained by constraints
+    \item available for \emph{sites} or \emph{species}
+    \item \texttt{summarize = TRUE} gives the accumulated total variance explained
+  \end{itemize}
+
+
+<<output.lines=1:7>>=
+# GOF for each species on 
+goodness(tbRDA)[ , 1:3]
+@
+
+<<>>=
+# total var explained by constraints
+goodness(tbRDA, summarize = TRUE)[1:6]
+@
+\end{frame}
+
+
+
+\subsection{}
+\begin{frame}[fragile]
+\frametitle{Inertia decomposition}
+  \begin{itemize}
+    \item \texttt{inertcomp()} decomposes variance expalained by constrained and unconstrained
+  \end{itemize}
+  
+<<output.lines=1:7>>=
+# variance explained by constrained (CCA) and unconstrained (CA) axes
+inertcomp(tbRDA, proportional = TRUE)
+@
+\end{frame}
+
+
+\subsection{Permutation Tests (I)}
+\begin{frame}
+\frametitle{Permutation Tests}
+\begin{itemize}
+  \item Cannot use paramatric test theory
+  \item Use of \emph{permutation tests} :
+  \begin{enumerate}
+    \item Shuffle the data ($H_0$ : No effect)
+    \item Fit model to shuffled data
+    \item Compute (pseudo- )F statistic for each model (Null distribution if $H_0$ is true)
+    \item $$p = \frac{(No.~of~F_{perm} \ge F))}{Total~No.~of~F_{perm} + 1}$$
+  \end{enumerate}
+<<echo = FALSE, out.width = '0.4\\textwidth'>>=
+densityplot(permustats(permutest(tbRDA)))
+@
+\end{itemize}
+\end{frame}
+
+
+\subsection{}
+\begin{frame}[fragile]
+\frametitle{Permutation Tests (II)}
+  A number of different test can be applied to RDA:
+  \begin{itemize}
+    \item Test overall significance of model
+    \item Test RDA axes
+    \item Test terms:
+    \begin{itemize}
+      \item sequential
+      \item marginal
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+
+\subsection{}
+\begin{frame}[fragile]
+\frametitle{Test overall model}
+<<>>=
+# Tests if the overall model is significant
+anova(tbRDA)
+@
+\end{frame}
+
+\subsection{}
+\begin{frame}[fragile]
+\frametitle{Test of RDA axes}
+<<>>=
+# Tests RDA axex
+anova(tbRDA, by = 'axis')
+@
+
+\blfootnote{\color{gray} \footnotesize Legendre, P., Oksanen, J. and ter Braak, C.J.F. (2011). Testing the significance of canonical axes in redundancy analysis. Methods in Ecology and Evolution 2, 269–277.}
+\end{frame}
+
+
+\subsection{}
+\begin{frame}[fragile]
+\frametitle{Sequential test of variables}
+\begin{itemize}
+  \item Variables are tested in the order they were specified (first to last)
+  \item Test of additional variance explained by adding the variable to the model
+  \item Order matters!
+\end{itemize}
+<<>>=
+# Tests RDA axex
+anova(tbRDA, by = 'terms')
+@
+\end{frame}
+
+
+\subsection{}
+\begin{frame}[fragile]
+\frametitle{Marginal test of variables}
+\begin{itemize}
+  \item Test explained variance of variable when all other variable are included in the model
+  \item Order has no influence
+\end{itemize}
+<<>>=
+# Tests RDA axex
+anova(tbRDA, by = 'margin')
+@
+
+\end{frame}
+
+
+
+\subsection{Final}
 \bgroup
 \setbeamercolor{background canvas}{bg=title}
 \begin{frame}[plain]{}
 \begin{center}
   \color{background}
-  \Huge \textbf{Your turn}! \\[1em]
+\textbf{Multivariate topics not covered here: }\\[1em]
+\begin{itemize}
+  \color{background}
   \large
-  Using the melbourne data. \\
+  \item Model selection (be careful with automatic methods!)
+  \item Distance-based hypothesis testing ((PER-)MANOVA, SIMPER, ANOSIM)
+  \item Dispersion measures ($\beta$-Diversity, Functional diversity)
+  \item Consensus RDA, RLQ (traits), ...
+  \item Model-based multivariate framework (See work of David Warton et al.)
+  \item manymore
+\end{itemize}
 \end{center}
 \end{frame}
 \egroup
 
 
 
-%%% ----------------------------------------------------------------------------
-\section{End}
-\begin{frame}
-\frametitle{Usefull topics not covered here}
-\begin{itemize}
-  \item Distance-based hypothesis testing ((PER-)MANOVA, SIMPER, ANOSIM)
-  \item Dispersion measures ($\beta$-Diversity, Functional diversity)
-  \item Consensus RDA, RLQ (traits), ...
-  \item Model-based ordination / hypothesis testing (See work of David Warton et al.)
-\end{itemize}
-
-
-\end{frame}
 
 %%% ----------------------------------------------------------------------------
 \end{document}

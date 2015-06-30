@@ -367,3 +367,30 @@ plot(1:19, rank_1st(dbRDA))
 plot(1:19, rank_1st(dbRDA_t))
 plot(1:19, rank_1st(CCA))
 
+
+
+### ----------------------------------------------------------------------------
+### Model building / diagnostics / testing 
+
+# visual inspetion via PCA
+biplot(rda(Denv, scale = TRUE), 
+       display = 'species', scaling = 2)
+# RDA on Hellinger transformed abundances
+tbRDA <- rda(decostand(Dabu, 'hellinger') ~ ., data = Denv)
+# Variance inflation factors
+vif.cca(tbRDA)
+# GOF for each species on 
+goodness(tbRDA)[ , 1:3]
+# total var explained by constraints
+goodness(tbRDA, summarize = TRUE)[1:6]
+# variance explained by constrained (CCA) and unconstrained (CA) axes
+inertcomp(tbRDA, proportional = TRUE)
+densityplot(permustats(permutest(tbRDA)))
+# Tests if the overall model is significant
+anova(tbRDA)
+# Tests RDA axex
+anova(tbRDA, by = 'axis')
+# Tests RDA axex
+anova(tbRDA, by = 'terms')
+# Tests RDA axex
+anova(tbRDA, by = 'margin')
