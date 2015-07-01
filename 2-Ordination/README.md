@@ -11,4 +11,4 @@
 ## Intructions
 To follow the course:
 
-* Please open and follow the R-script `~/code/IntroOrdiation.R` along with the lecture.
+* Please open and follow the R-script `~/code/IntroOrdination.R` along with the lecture.
