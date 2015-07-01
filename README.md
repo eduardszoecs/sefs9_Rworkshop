@@ -30,7 +30,7 @@ Packages extend the basic functionality of R and add functions or datasets.
 For this course we need a few extra packages.  Please install the following packages - simply paste and run this command in your R prompt :
 
 ```{R}
-install.packages(c("vegan", "rgl"))
+install.packages(c("vegan", "rgl"), dependencies = TRUE)
 ```
 
 
@@ -44,9 +44,9 @@ install.packages(c("vegan", "rgl"))
 
 The course is structured into four parts of roughly 1.5 hours:
 
-* Linear and Generalized Linear Models (Ralf B. Schäfer) (**9.00 - 11.00**)
+* [Linear and Generalized Linear Models (Ralf B. Schäfer)](https://github.com/EDiLD/sefs9_Rworkshop/tree/master/1-LinearModels) (**9.00 - 11.00**)
 * [Ordinations (Eduard Szöcs)](https://github.com/EDiLD/sefs9_Rworkshop/tree/master/3-Ordination) (**11.15 - 12.15 and 13.15 - 14.45**)
-* Spatial data analysis (Avit Kumar Bhowmik) (**15.00 - 16.45**)
+* [Spatial data analysis (Avit Kumar Bhowmik)](https://github.com/EDiLD/sefs9_Rworkshop/tree/master/3-SpatialModels) (**15.00 - 16.45**)
 * Course Evaluation (**16.45 - 17.00**) - see link below.
 
 Each part has its own folder, with slides, data, code and other materials.
