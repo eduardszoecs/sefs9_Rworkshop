@@ -1742,7 +1742,7 @@ anova(tbRDA)
 \begin{frame}[fragile]
 \frametitle{Test of RDA axes}
 <<>>=
-# Tests RDA axex
+# Tests RDA axes
 anova(tbRDA, by = 'axis')
 @
 
@@ -1759,7 +1759,7 @@ anova(tbRDA, by = 'axis')
   \item Order matters!
 \end{itemize}
 <<>>=
-# Tests RDA axex
+# Tests RDA axes
 anova(tbRDA, by = 'terms')
 @
 \end{frame}
@@ -1773,7 +1773,7 @@ anova(tbRDA, by = 'terms')
   \item Order has no influence
 \end{itemize}
 <<>>=
-# Tests RDA axex
+# Tests RDA axes
 anova(tbRDA, by = 'margin')
 @
 
