@@ -5,8 +5,8 @@
 # 																				#
 #################################################################################
 
-# let us first set a working directory i.e. a directory where we store all files
-setwd("~/Arbeit/Vortraege/2015/SEFS/Workshop")
+# let us first set a working directory i.e. a directory where we store all data files
+setwd("~/Arbeit/Vortraege/2015/SEFS/Workshop/data")
 # you have to set a path to a working directory on your local machine here
 # to simplify the identification of your path, you can use the following function
 file.choose()
