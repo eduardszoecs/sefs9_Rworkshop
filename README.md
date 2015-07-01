@@ -36,7 +36,7 @@ install.packages(c("vegan", "rgl"), dependencies = TRUE)
 
 ### Downloading code and data
 
-1. [Klick here](https://github.com/EDiLD/sefs9_Rworkshop/archive/master.zip) to download all the material.
+1. [Click here](https://github.com/EDiLD/sefs9_Rworkshop/archive/master.zip) to download all the material.
 2. Unzip the file - The unzipped folder contains all files and folders of this online repository.
 
 
