@@ -97,15 +97,15 @@ knit_hooks$set(output = function(x, options) {
    }
    x <- unlist(strsplit(x, "\n"))
    more <- "..."
-   if (length(lines)==1) {        # first n lines
+   if (length(lines) == 1) {        # first n lines
      if (length(x) > lines) {
        # truncate the output, but add ....
        x <- c(head(x, lines), more)
      }
    } else {
-     x <- c(if (abs(lines[1])>1) more else NULL, 
+     x <- c(if (abs(lines[1]) > 1) more else NULL, 
             x[lines], 
-            if (length(x)>lines[abs(length(lines))]) more else NULL
+            if (length(x) > lines[abs(length(lines))]) more else NULL
            )
    }
    # paste these lines together
@@ -117,15 +117,15 @@ knit_hooks$set(output = function(x, options) {
 
 \maketitle
 
-\begin{frame}
-\frametitle{}
-\begin{columns}
-  \begin{column}{0.5\textwidth}
-  \end{column}
-  \begin{column}{0.5\textwidth}
-  \end{column}
-\end{columns}
-\end{frame}
+% \begin{frame}
+% \frametitle{}
+% \begin{columns}
+%   \begin{column}{0.5\textwidth}
+%   \end{column}
+%   \begin{column}{0.5\textwidth}
+%   \end{column}
+% \end{columns}
+% \end{frame}
 
 
 %%% ----------------------------------------------------------------------------
@@ -142,7 +142,8 @@ knit_hooks$set(output = function(x, options) {
   }
   \vspace{2em}
   \begin{center}
-  (Nearly) no maths today ;)
+  (Nearly) no maths today ;) \\
+  \includegraphics[width = 0.2\textwidth]{fig/veganpower.jpeg}
   \end{center}
 
 \end{frame}
@@ -1707,7 +1708,7 @@ inertcomp(tbRDA, proportional = TRUE)
     \item Shuffle the data ($H_0$ : No effect)
     \item Fit model to shuffled data
     \item Compute (pseudo- )F statistic for each model (Null distribution if $H_0$ is true)
-    \item $$p = \frac{(No.~of~F_{perm} \ge F))}{Total~No.~of~F_{perm} + 1}$$
+    \item $$p = \frac{(No.~of~F_{perm} \ge F) + 1}{Total~No.~of~F_{perm} + 1}$$
   \end{enumerate}
 <<echo = FALSE, out.width = '0.4\\textwidth'>>=
 densityplot(permustats(permutest(tbRDA)))
