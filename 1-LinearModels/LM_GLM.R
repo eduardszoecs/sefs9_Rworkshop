@@ -183,8 +183,8 @@ summary(mod_3)
 mod_4 <- lm(k_micro ~ Landuse_type + Temp + NO3log + Plog, data = data)
 mod_5 <- lm(k_micro ~ Temp + NO3log+Plog, data = data)
 mod_6 <- lm(k_micro ~ Landuse_type, data = data)
- the estimated coefficient for factors
 summary(mod_6)
+# the estimated coefficient for factors
 # are given as Intercept + estimate for factor level
 
 # use F test to check for significant reduction in explained variance
@@ -327,7 +327,7 @@ shrinkage <- function(fit, k=10){
 #### end of function
 
 #calculate cross-validation for best-fit model from automatic model building
-mod_bf <- lm(k_micro ~ pH, data = data)
+mod_bf <- lm(k_micro ~ pH, data = data)
 shrinkage(mod_bf, k=2) 
 # note that the sample size becomes rather small for 2 groups
 # if you repeat this code, you obtain a wide range of changes in R2

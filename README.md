@@ -30,7 +30,7 @@ Packages extend the basic functionality of R and add functions or datasets.
 For this course we need a few extra packages.  Please install the following packages - simply paste and run this command in your R prompt :
 
 ```{R}
-install.packages(c("vegan", "rgl"), dependencies = TRUE)
+install.packages(c("vegan", "rgl", "leaps", "car", "DAAG", "MuMIn", "relaimpo", "hier.part", "bootstrap", "MPV", "faraway"), dependencies = TRUE)
 ```
 
 
