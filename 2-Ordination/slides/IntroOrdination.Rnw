@@ -167,7 +167,7 @@ knit_hooks$set(output = function(x, options) {
   \end{column}
   \begin{column}{0.5\textwidth}
     \begin{itemize}
-      \item Fish
+      \item Fish communities
       \item 30 sites along the Doubs River
     \end{itemize}
     \pause
@@ -247,7 +247,7 @@ head(Denv)
   
   \begin{column}{0.6\textwidth}
     \begin{itemize}
-      \item Macroivertebrates
+      \item Macroivertebrate communities
       \item 24 sites
       \item covering a salinity and toxicity gradient
     \end{itemize}
