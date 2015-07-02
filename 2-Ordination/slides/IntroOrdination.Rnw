@@ -561,7 +561,7 @@ for (i in 1:4) {
 ## Create biplot with arrows and color ellipses added
 @
 
-\visible<5->{
+\only<5>{
 <<biplot3e, out.width = '\\textwidth', echo = FALSE>>=
 # biplot
 bp <- biplot(PCA, cex = 5, scaling = 3)
@@ -682,7 +682,7 @@ biplot(PCA, scaling = 3)
   \color{hilight}{A Solution:}
   \pause
     \begin{itemize}
-      \item Reduce number of variables to \emph{Principal Components}
+      \item Reduce the number of variables to \emph{Principal Components}
       \item regress these
     \end{itemize}
 \end{frame}
