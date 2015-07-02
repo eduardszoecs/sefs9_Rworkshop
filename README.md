@@ -49,7 +49,7 @@ The course is structured into four parts of roughly 1.5 hours:
 * [Linear and Generalized Linear Models (Ralf B. Schäfer)](https://github.com/EDiLD/sefs9_Rworkshop/tree/master/1-LinearModels) (**9.00 - 11.00**)
 * [Ordinations (Eduard Szöcs)](https://github.com/EDiLD/sefs9_Rworkshop/tree/master/2-Ordination) (**11.15 - 12.15 and 13.15 - 14.45**)
 * [Spatial data analysis (Avit Kumar Bhowmik)](https://github.com/EDiLD/sefs9_Rworkshop/tree/master/3-SpatialModels) (**15.00 - 16.45**)
-* Course Evaluation (**16.45 - 17.00**) - see link below.
+* [Course Evaluation](https://docs.google.com/forms/d/1wYkbajB_q5NPxzqJfS4gAwrRro7BcOd4OE_W5tmiOYo/viewform?usp=send_form) (**16.45 - 17.00**) - see link below.
 
 Each part has its own folder, with slides, data, code and other materials.
 Each lecture is structured in: Intro - Demo - Exercise
