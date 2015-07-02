@@ -310,12 +310,11 @@ plot(tbRDA, type = 't')
 
 
 ### ----------
-### distance-based RDA (tb-RDA)
+### distance-based RDA (db-RDA)
 
-## # dbRDA
-## dbRDA <- capscale(Dabu ~ ., data = Denv,
-##                   distance = 'bray')
-## plot(dbRDA, type = 't')
+dbRDA <- capscale(Dabu ~ ., data = Denv, 
+                  distance = 'bray')
+plot(dbRDA, type = 't')
 summary(dbRDA)
 
 ### ----------
@@ -386,11 +385,15 @@ goodness(tbRDA, summarize = TRUE)[1:6]
 # variance explained by constrained (CCA) and unconstrained (CA) axes
 inertcomp(tbRDA, proportional = TRUE)
 densityplot(permustats(permutest(tbRDA)))
+# RDA on Hellinger transformed abundances
+tbRDA <- rda(decostand(Dabu, 'hellinger') ~ alt + oxy + pH + nit + pho,
+             data = Denv)
+vif.cca(tbRDA)
 # Tests if the overall model is significant
 anova(tbRDA)
-# Tests RDA axex
+# Tests RDA axes
 anova(tbRDA, by = 'axis')
-# Tests RDA axex
+# Tests RDA axes
 anova(tbRDA, by = 'terms')
-# Tests RDA axex
+# Tests RDA axes
 anova(tbRDA, by = 'margin')

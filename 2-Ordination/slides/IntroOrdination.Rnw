@@ -97,15 +97,15 @@ knit_hooks$set(output = function(x, options) {
    }
    x <- unlist(strsplit(x, "\n"))
    more <- "..."
-   if (length(lines)==1) {        # first n lines
+   if (length(lines) == 1) {        # first n lines
      if (length(x) > lines) {
        # truncate the output, but add ....
        x <- c(head(x, lines), more)
      }
    } else {
-     x <- c(if (abs(lines[1])>1) more else NULL, 
+     x <- c(if (abs(lines[1]) > 1) more else NULL, 
             x[lines], 
-            if (length(x)>lines[abs(length(lines))]) more else NULL
+            if (length(x) > lines[abs(length(lines))]) more else NULL
            )
    }
    # paste these lines together
@@ -117,15 +117,15 @@ knit_hooks$set(output = function(x, options) {
 
 \maketitle
 
-\begin{frame}
-\frametitle{}
-\begin{columns}
-  \begin{column}{0.5\textwidth}
-  \end{column}
-  \begin{column}{0.5\textwidth}
-  \end{column}
-\end{columns}
-\end{frame}
+% \begin{frame}
+% \frametitle{}
+% \begin{columns}
+%   \begin{column}{0.5\textwidth}
+%   \end{column}
+%   \begin{column}{0.5\textwidth}
+%   \end{column}
+% \end{columns}
+% \end{frame}
 
 
 %%% ----------------------------------------------------------------------------
@@ -142,7 +142,8 @@ knit_hooks$set(output = function(x, options) {
   }
   \vspace{2em}
   \begin{center}
-  (Nearly) no maths today ;)
+  (Nearly) no maths today ;) \\
+  \includegraphics[width = 0.2\textwidth]{fig/veganpower.jpeg}
   \end{center}
 
 \end{frame}
@@ -1478,23 +1479,25 @@ plot(tbRDA, type = 't')
 
 
 ### ----------
-### distance-based RDA (tb-RDA)
+### distance-based RDA (db-RDA)
 
 @
 
-<<dbRDA1, warning=FALSE, eval = FALSE, message=FALSE, purl = TRUE, message = FALSE>>=
+<<dbRDA1a, warning=FALSE, echo = FALSE, message=FALSE, purl = TRUE, message = FALSE, fig.show='hide'>>=
+dbRDA <- capscale(Dabu ~ ., data = Denv, 
+                  distance = 'bray')
+plot(dbRDA, type = 't')
+@
+
+<<dbRDA1, warning=FALSE, eval = FALSE, message=FALSE, purl = FALSE, message = FALSE>>=
 # dbRDA
 dbRDA <- capscale(Dabu ~ ., data = Denv, 
                   distance = 'bray')
 plot(dbRDA, type = 't')
 @
 
-<<dbRDA1a, warning=FALSE, echo = FALSE, message=FALSE, purl = FALSE, message = FALSE>>=
-dbRDA <- capscale(Dabu ~ ., data = Denv, 
-                  distance = 'bray')
-@
 
-<<dbRDA3, warning=FALSE, message=FALSE, output.lines = 6:17>>=
+<<dbRDA3, warning=FALSE, message=FALSE, output.lines = 5:17>>=
 summary(dbRDA)
 @
 
@@ -1619,7 +1622,7 @@ plot(1:19, rank_1st(CCA))
 \begin{itemize}
   \item RDA et al. are \emph{regression methods} - everything you know applies also here
   \item Collinearity of predictors may lead to wrong conclusions.
-  \item Many methods available (see ref.), also use your \emph{ecological knowledge}!
+  \item Many methods available (see ref.). Additional: \emph{Use your ecological knowledge}!
 \end{itemize}
 
 \begin{columns}[t]
@@ -1647,8 +1650,9 @@ vif.cca(tbRDA)
 @
 
 \begin{itemize}
-  \item VIF \textgreater 20 : strong collonearity
-  \item VIF \textgreater 10 : potential problems
+  \item many different cutoffs (see 1st part)
+  \item very high values ($\gg 20$)
+  \item strong collinearity
 \end{itemize}
 
   \end{column}
@@ -1661,9 +1665,9 @@ vif.cca(tbRDA)
 \begin{frame}[fragile]
 \frametitle{Goodness of fit}
   \begin{itemize}
-    \item \texttt{goodness()} returns the cumulative proportion of variance explained by constraints
+    \item cumulative variance explained by constraints
     \item available for \emph{sites} or \emph{species}
-    \item \texttt{summarize = TRUE} gives the accumulated total variance explained
+    \item \texttt{summarize = TRUE} gives the accumulated total variance (= last column)
   \end{itemize}
 
 
@@ -1684,7 +1688,7 @@ goodness(tbRDA, summarize = TRUE)[1:6]
 \begin{frame}[fragile]
 \frametitle{Inertia decomposition}
   \begin{itemize}
-    \item \texttt{inertcomp()} decomposes variance expalained by constrained and unconstrained
+    \item can decompose variance into constrained (CCA) and unconstrained (CA) parts
   \end{itemize}
   
 <<output.lines=1:7>>=
@@ -1694,9 +1698,9 @@ inertcomp(tbRDA, proportional = TRUE)
 \end{frame}
 
 
-\subsection{Permutation Tests (I)}
+\subsection{Permutation Tests}
 \begin{frame}
-\frametitle{Permutation Tests}
+\frametitle{Permutation Tests (I)}
 \begin{itemize}
   \item Cannot use paramatric test theory
   \item Use of \emph{permutation tests} :
@@ -1704,7 +1708,7 @@ inertcomp(tbRDA, proportional = TRUE)
     \item Shuffle the data ($H_0$ : No effect)
     \item Fit model to shuffled data
     \item Compute (pseudo- )F statistic for each model (Null distribution if $H_0$ is true)
-    \item $$p = \frac{(No.~of~F_{perm} \ge F))}{Total~No.~of~F_{perm} + 1}$$
+    \item $$p = \frac{(No.~of~F_{perm} \ge F) + 1}{Total~No.~of~F_{perm} + 1}$$
   \end{enumerate}
 <<echo = FALSE, out.width = '0.4\\textwidth'>>=
 densityplot(permustats(permutest(tbRDA)))
@@ -1732,6 +1736,14 @@ densityplot(permustats(permutest(tbRDA)))
 \subsection{}
 \begin{frame}[fragile]
 \frametitle{Test overall model}
+I omit some variables due to collinearity:
+<<>>=
+# RDA on Hellinger transformed abundances
+tbRDA <- rda(decostand(Dabu, 'hellinger') ~ alt + oxy + pH + nit + pho,
+             data = Denv)
+vif.cca(tbRDA)
+@
+
 <<>>=
 # Tests if the overall model is significant
 anova(tbRDA)
@@ -1742,7 +1754,7 @@ anova(tbRDA)
 \begin{frame}[fragile]
 \frametitle{Test of RDA axes}
 <<>>=
-# Tests RDA axex
+# Tests RDA axes
 anova(tbRDA, by = 'axis')
 @
 
@@ -1759,7 +1771,7 @@ anova(tbRDA, by = 'axis')
   \item Order matters!
 \end{itemize}
 <<>>=
-# Tests RDA axex
+# Tests RDA axes
 anova(tbRDA, by = 'terms')
 @
 \end{frame}
@@ -1773,7 +1785,7 @@ anova(tbRDA, by = 'terms')
   \item Order has no influence
 \end{itemize}
 <<>>=
-# Tests RDA axex
+# Tests RDA axes
 anova(tbRDA, by = 'margin')
 @
 

@@ -30,14 +30,16 @@ Packages extend the basic functionality of R and add functions or datasets.
 For this course we need a few extra packages.  Please install the following packages - simply paste and run this command in your R prompt :
 
 ```{R}
-install.packages(c("vegan", "rgl"), dependencies = TRUE)
+install.packages(c("vegan", "rgl", "leaps", "car", "DAAG", "MuMIn", "relaimpo", 
+                   "hier.part", "bootstrap", "MPV", "faraway"), 
+                 dependencies = TRUE)
 ```
 
 
 ### Downloading code and data
 
 1. [Click here](https://github.com/EDiLD/sefs9_Rworkshop/archive/master.zip) to download all the material.
-2. Unzip the file - The unzipped folder contains all files and folders of this online repository.
+2. Unzip the file - The unzipped folder contains all files and folders of this on-line repository.
 
 
 ## Structure of the Course
@@ -47,7 +49,7 @@ The course is structured into four parts of roughly 1.5 hours:
 * [Linear and Generalized Linear Models (Ralf B. Schäfer)](https://github.com/EDiLD/sefs9_Rworkshop/tree/master/1-LinearModels) (**9.00 - 11.00**)
 * [Ordinations (Eduard Szöcs)](https://github.com/EDiLD/sefs9_Rworkshop/tree/master/2-Ordination) (**11.15 - 12.15 and 13.15 - 14.45**)
 * [Spatial data analysis (Avit Kumar Bhowmik)](https://github.com/EDiLD/sefs9_Rworkshop/tree/master/3-SpatialModels) (**15.00 - 16.45**)
-* Course Evaluation (**16.45 - 17.00**) - see link below.
+* [Course Evaluation](https://docs.google.com/forms/d/1wYkbajB_q5NPxzqJfS4gAwrRro7BcOd4OE_W5tmiOYo/viewform?usp=send_form) (**16.45 - 17.00**) - see link below.
 
 Each part has its own folder, with slides, data, code and other materials.
 Each lecture is structured in: Intro - Demo - Exercise
