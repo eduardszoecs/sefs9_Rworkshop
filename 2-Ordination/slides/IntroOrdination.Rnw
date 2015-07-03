@@ -642,7 +642,7 @@ summary(PCA, display = NULL, scaling = 3)
 ### Exercise 1 - Solution
 @
 
-<<>>=
+<<purl=FALSE>>=
 take <- env[ , !names(env) %in% c('ID', 'logCond', 'logmaxTU')]
 PCA <- rda(take, scale = TRUE)
 cumsum(PCA$CA$eig / PCA$tot.chi)[1:2]
@@ -650,7 +650,7 @@ cumsum(PCA$CA$eig / PCA$tot.chi)[1:2]
 
   \begin{columns}
     \begin{column}{0.5\textwidth}
-<<biplot2, out.width='\\textwidth'>>=
+<<biplot2, out.width='\\textwidth', purl=FALSE>>=
 biplot(PCA, scaling = 3)
 @
     \end{column}
@@ -1009,7 +1009,7 @@ NMDS$stress
 ### Exercise 2 - Solution
 @
 
-<<ex2, out.width = '\\textwidth', echo = FALSE>>=
+<<ex2, out.width = '\\textwidth', echo = FALSE, purl=FALSE>>=
 # create 4 plots
 par(mfrow = c(2, 2))
 # plot PCA
@@ -1041,7 +1041,7 @@ plot(NMDS_bc, type = 'text', main = 'NMDS, bc')
 
 
 %%% ----------------------------------------------------------------------------
-\subsection{Fit environmantal variables}
+\subsection{Fit environmental variables}
 \begin{frame}[fragile]
 \frametitle{Fit environmental variables to ordination (I)}
 \begin{columns}[t]
@@ -1549,11 +1549,14 @@ plot(dbRDA, type = 't')
 
 See Demo.
 
-<<echo=FALSE, results='hide', fig.keep = 'none'>>=
+<<echo=FALSE>>=
 
 ### ----------
 ### Exercise 3 - Solution
 
+@
+
+<<echo=FALSE, results='hide', fig.keep = 'none', purl=FALSE>>=
 # 1 - RDA
 RDA <- rda(dummy[ , -1] ~ Site, data = dummy)
 

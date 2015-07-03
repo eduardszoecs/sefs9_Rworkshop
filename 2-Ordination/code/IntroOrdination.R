@@ -97,10 +97,6 @@ summary(PCA, display = NULL, scaling = 3)
 
 ### ----------
 ### Exercise 1 - Solution
-take <- env[ , !names(env) %in% c('ID', 'logCond', 'logmaxTU')]
-PCA <- rda(take, scale = TRUE)
-cumsum(PCA$CA$eig / PCA$tot.chi)[1:2]
-biplot(PCA, scaling = 3)
 
 ### -----------------------------------------------------------------------------
 ### Excursus | principal component regression (PCR)
@@ -200,27 +196,6 @@ NMDS$stress
 
 ### ----------
 ### Exercise 2 - Solution
-# create 4 plots
-par(mfrow = c(2, 2))
-# plot PCA
-plot(rda(dummy[ , -1]), scaling = 3, main = 'PCA')
-  
-# Plot PCoA with euclidean distance
-PCOA_eu <- cmdscale(vegdist(dummy[ , -1], 'eu'))
-plot(PCOA_eu, type = 'n', main = 'PCoA, eu')
-text(PCOA_eu, labels = dummy$Site)
-text(wascores(PCOA_eu, dummy[ , -1]), col = 'red', labels = colnames(dummy)[-1])
-
-# Plot PCoA with Bray-Curtis distance
-PCOA_bc <- cmdscale(vegdist(dummy[ , -1], 'bray'))
-plot(PCOA_bc, type = 'n', main = 'PCoA, bc')
-text(PCOA_bc, labels = dummy$Site)
-text(wascores(PCOA_bc, dummy[ , -1]), col = 'red', labels = colnames(dummy)[-1])
-
-# Plot NMDS with Bray-Curtis distance
-set.seed(1234)
-NMDS_bc <- metaMDS(dummy[ , -1], trace = 0)
-plot(NMDS_bc, type = 'text', main = 'NMDS, bc')
 
 
 
@@ -319,52 +294,6 @@ summary(dbRDA)
 
 ### ----------
 ### Exercise 3 - Solution
-
-# 1 - RDA
-RDA <- rda(dummy[ , -1] ~ Site, data = dummy)
-
-# 2 - tbRDA
-dummy_hel <- decostand(dummy[ , -1], 'hellinger')
-tbRDA <- rda(dummy_hel ~ Site, data = dummy)
-
-# 3 - dbRDA
-dbRDA <- capscale(dummy[ , -1] ~ Site, data = dummy, distance = 'bray')
-dbRDA_t <- capscale(dummy[ , -1]^0.25 ~ Site, data = dummy, distance = 'bray')
-
-# cca
-CCA <- cca(dummy[ , -1] ~ Site, data = dummy)
-
-
-### visual insection
-par(mfrow = c(2,3))
-plot(RDA, main = 'RDA', scaling = 3)
-plot(tbRDA, main = 'tb-RDA', scaling = 3)
-plot(dbRDA, main = 'db-RDA', scaling = 3)
-plot(dbRDA_t, main = 'db-RDA (x^0.25)', scaling = 3)
-plot(CCA, main = 'CCA', scaling = 3)
-
-
-# explained variance
-explvar <- function(x){
-  x$CCA$tot.chi / x$tot.chi
-}
-explvar(RDA)
-explvar(tbRDA)
-explvar(dbRDA)
-explvar(dbRDA_t)
-explvar(CCA)
-
-
-# plot ranks on first axis
-rank_1st <- function(x){
-  rank(scores(x, choices = 1, scaling = 1, display = 'sites'))
-}
-par(mfrow = c(2,3))
-plot(1:19, rank_1st(RDA))
-plot(1:19, rank_1st(tbRDA))
-plot(1:19, rank_1st(dbRDA))
-plot(1:19, rank_1st(dbRDA_t))
-plot(1:19, rank_1st(CCA))
 
 
 
