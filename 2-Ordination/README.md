@@ -12,4 +12,4 @@
 To follow the course:
 
 * Please open and follow the R-script `~/code/IntroOrdination.R` along with the lecture.
-* `~/code/IntroOrdination_withsolution.R` is the final script with solutions to the exercises.
+* `~/code/IntroOrdination_withsolutions.R` is the final script with solutions to the exercises.

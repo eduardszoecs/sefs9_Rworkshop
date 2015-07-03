@@ -1,4 +1,22 @@
+### ----------------------------------------------------------------------------
+### R Script for the workshop: "Data analysis in freshwater ecology using R" @SEFS9
+### Part 2: A (brief) introduction to ordination and the vegan package
+### Written by Eduard Szöcs, 03.07.2015
 
+
+### --------------
+### Just a small function to reset the graphics window
+### Written by Gavin Simpson
+### Source: http://stackoverflow.com/questions/5789982/reset-par-to-the-default-values-at-startup
+### Usage: par(resetPar()) 
+resetPar <- function() {
+    dev.new()
+    op <- par(no.readonly = TRUE)
+    dev.off()
+    op
+}
+### ----------------------------------------------------------------------------
+### Datasets
 
 ### ---------------
 ### Doubs river data
@@ -12,8 +30,7 @@ head(Dabu[ , 1:18])
 # Dimension and first rows of Environmental data
 dim(Denv)
 head(Denv)
-### ----------------------------------------------------------------------------
-### Datasets
+
 ### ---------------
 ### Melbourne data
 # setwd('3-Ordination/data/')
@@ -39,23 +56,24 @@ legend('topright', legend = colnames(dummy)[-1],
 
 
 ### ----------------------------------------------------------------------------
-### Indirect Gradient Analysis
+### Unconstrained Ordination
 
 ### ----------
 # Slide 12 - plot environmental variables along doubs river
-    par(mfrow = c(2, 2))
-    plot(Dspa, asp = 1, pch = 21, cex = 5*Denv$alt / max(Denv$alt), bg = 'darkred',
-         main = 'Altitude')
-    lines(Dspa, col = 'steelblue', lwd = 2)
-    plot(Dspa, asp = 1, pch = 21, cex = 5*Denv$deb / max(Denv$deb), bg = 'darkred',
-         main = 'Discharge')
-    lines(Dspa, col = 'steelblue', lwd = 2)
-    plot(Dspa, asp = 1, pch = 21, cex = 5*Denv$nit / max(Denv$nit), bg = 'darkred',
-         main = 'Nitrate')
-    lines(Dspa, col = 'steelblue', lwd = 2)
-    plot(Dspa, asp = 1, pch = 21, cex = 5*Denv$pho / max(Denv$pho), bg = 'darkred',
-         main = 'Phosphate')
-    lines(Dspa, col = 'steelblue', lwd = 2)
+par(mfrow = c(2, 2))
+plot(Dspa, asp = 1, pch = 21, cex = 5*Denv$alt / max(Denv$alt), bg = 'darkred',
+     main = 'Altitude')
+lines(Dspa, col = 'steelblue', lwd = 2)
+plot(Dspa, asp = 1, pch = 21, cex = 5*Denv$deb / max(Denv$deb), bg = 'darkred',
+     main = 'Discharge')
+lines(Dspa, col = 'steelblue', lwd = 2)
+plot(Dspa, asp = 1, pch = 21, cex = 5*Denv$nit / max(Denv$nit), bg = 'darkred',
+     main = 'Nitrate')
+lines(Dspa, col = 'steelblue', lwd = 2)
+plot(Dspa, asp = 1, pch = 21, cex = 5*Denv$pho / max(Denv$pho), bg = 'darkred',
+     main = 'Phosphate')
+lines(Dspa, col = 'steelblue', lwd = 2)
+par(resetPar()) 
 ### 3-D Plot
 require(rgl)
 plot3d(Denv[ , c('das', 'alt', 'pho')], pch = 16, size = 5)
@@ -100,11 +118,13 @@ summary(PCA, display = NULL, scaling = 3)
 take <- env[ , !names(env) %in% c('ID', 'logCond', 'logmaxTU')]
 PCA <- rda(take, scale = TRUE)
 cumsum(PCA$CA$eig / PCA$tot.chi)[1:2]
-biplot(PCA, scaling = 3)
 
 ### -----------------------------------------------------------------------------
 ### Excursus | principal component regression (PCR)
 
+### PCA from Exercise 1
+take <- env[ , !names(env) %in% c('ID', 'logCond', 'logmaxTU')]
+PCA <- rda(take, scale = TRUE)
 # calculate shannon diversity index
 div <- diversity(abu[ , -1], index = 'shannon')
 pc <- scores(PCA, choices = c(1, 2), scaling = 1, display = 'sites')
@@ -137,6 +157,7 @@ plot(Dspa, asp = 1, pch = 21, cex = 3*Dabu$OMB / max(Dabu$OMB), bg = 'darkred',
 lines(Dspa, col = 'steelblue', lwd = 2)
 arrows(25, 133, 94, 45, code = 3, lwd = 7, col = 'darkorange')
 text(30, 70, '?', cex = 2, col = 'darkorange')
+par(resetPar()) 
 
 ### -----------
 ### (Dis-) Similarity measures
@@ -291,14 +312,11 @@ summary(RDA)
 
 ### ----------
 ### Transformations
-
 mat
 decostand(mat, 'hellinger')
 
-
-### ----------
+### ----------------------------------------------------------------------------
 ### transformation-based RDA (tb-RDA)
-
 # Hellinger transformation
 Dabu_h <- decostand(Dabu, 'hellinger')
 # RDA on Hellinger transformed abundances
@@ -309,9 +327,8 @@ tbRDA <- rda(Dabu_h ~ ., data = Denv)
 plot(tbRDA, type = 't')
 
 
-### ----------
+### ----------------------------------------------------------------------------
 ### distance-based RDA (db-RDA)
-
 dbRDA <- capscale(Dabu ~ ., data = Denv, 
                   distance = 'bray')
 plot(dbRDA, type = 't')

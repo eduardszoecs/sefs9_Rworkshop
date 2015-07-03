@@ -154,6 +154,26 @@ knit_hooks$set(output = function(x, options) {
 \begin{frame}[plain]{}
 \begin{center}
   \Huge \color{title} Datasets
+<<echo = FALSE>>=
+### ----------------------------------------------------------------------------
+### R Script for the workshop: "Data analysis in freshwater ecology using R" @SEFS9
+### Part 2: A (brief) introduction to ordination and the vegan package
+### Written by Eduard Szöcs, 03.07.2015
+
+
+### --------------
+### Just a small function to reset the graphics window
+### Written by Gavin Simpson
+### Source: http://stackoverflow.com/questions/5789982/reset-par-to-the-default-values-at-startup
+### Usage: par(resetPar()) 
+resetPar <- function() {
+    dev.new()
+    op <- par(no.readonly = TRUE)
+    dev.off()
+    op
+}
+@
+
 \end{center}
 \end{frame}
 
@@ -187,7 +207,8 @@ knit_hooks$set(output = function(x, options) {
 \begin{frame}[fragile]
 \frametitle{Demonstration: Doubs river fish communities | Species}
 <<echo=FALSE>>=
-
+### ----------------------------------------------------------------------------
+### Datasets
 
 ### ---------------
 ### Doubs river data
@@ -269,8 +290,7 @@ head(Denv)
 \begin{frame}[fragile]
 \frametitle{Exercise: Salinization and Pesticides}
 <<echo=FALSE>>=
-### ----------------------------------------------------------------------------
-### Datasets
+
 ### ---------------
 ### Melbourne data
 @
@@ -346,23 +366,24 @@ legend('topright', legend = colnames(dummy)[-1],
 
 
 ### ----------------------------------------------------------------------------
-### Indirect Gradient Analysis
+### Unconstrained Ordination
 
 ### ----------
 # Slide 12 - plot environmental variables along doubs river
-    par(mfrow = c(2, 2))
-    plot(Dspa, asp = 1, pch = 21, cex = 5*Denv$alt / max(Denv$alt), bg = 'darkred',
-         main = 'Altitude')
-    lines(Dspa, col = 'steelblue', lwd = 2)
-    plot(Dspa, asp = 1, pch = 21, cex = 5*Denv$deb / max(Denv$deb), bg = 'darkred',
-         main = 'Discharge')
-    lines(Dspa, col = 'steelblue', lwd = 2)
-    plot(Dspa, asp = 1, pch = 21, cex = 5*Denv$nit / max(Denv$nit), bg = 'darkred',
-         main = 'Nitrate')
-    lines(Dspa, col = 'steelblue', lwd = 2)
-    plot(Dspa, asp = 1, pch = 21, cex = 5*Denv$pho / max(Denv$pho), bg = 'darkred',
-         main = 'Phosphate')
-    lines(Dspa, col = 'steelblue', lwd = 2)
+par(mfrow = c(2, 2))
+plot(Dspa, asp = 1, pch = 21, cex = 5*Denv$alt / max(Denv$alt), bg = 'darkred',
+     main = 'Altitude')
+lines(Dspa, col = 'steelblue', lwd = 2)
+plot(Dspa, asp = 1, pch = 21, cex = 5*Denv$deb / max(Denv$deb), bg = 'darkred',
+     main = 'Discharge')
+lines(Dspa, col = 'steelblue', lwd = 2)
+plot(Dspa, asp = 1, pch = 21, cex = 5*Denv$nit / max(Denv$nit), bg = 'darkred',
+     main = 'Nitrate')
+lines(Dspa, col = 'steelblue', lwd = 2)
+plot(Dspa, asp = 1, pch = 21, cex = 5*Denv$pho / max(Denv$pho), bg = 'darkred',
+     main = 'Phosphate')
+lines(Dspa, col = 'steelblue', lwd = 2)
+par(resetPar()) 
 @
   \end{column}
   \begin{column}{0.5\textwidth}
@@ -696,6 +717,9 @@ biplot(PCA, scaling = 3)
 ### -----------------------------------------------------------------------------
 ### Excursus | principal component regression (PCR)
 
+### PCA from Exercise 1
+take <- env[ , !names(env) %in% c('ID', 'logCond', 'logmaxTU')]
+PCA <- rda(take, scale = TRUE)
 @
 
 <<>>=
@@ -745,6 +769,7 @@ plot(Dspa, asp = 1, pch = 21, cex = 3*Dabu$OMB / max(Dabu$OMB), bg = 'darkred',
 lines(Dspa, col = 'steelblue', lwd = 2)
 arrows(25, 133, 94, 45, code = 3, lwd = 7, col = 'darkorange')
 text(30, 70, '?', cex = 2, col = 'darkorange')
+par(resetPar()) 
 @
   \end{column}
   \begin{column}{0.6\textwidth}
@@ -1389,7 +1414,6 @@ summary(RDA)
 
 ### ----------
 ### Transformations
-
 @
 
 
@@ -1411,10 +1435,8 @@ decostand(mat, 'hellinger')
     \begin{column}{0.55\textwidth}
 <<echo=FALSE>>=
 
-
-### ----------
+### ----------------------------------------------------------------------------
 ### transformation-based RDA (tb-RDA)
-
 @
 
 <<tbRDA1, warning=FALSE, eval = FALSE, message=FALSE, purl = FALSE>>=
@@ -1478,9 +1500,8 @@ plot(tbRDA, type = 't')
 <<echo=FALSE>>=
 
 
-### ----------
+### ----------------------------------------------------------------------------
 ### distance-based RDA (db-RDA)
-
 @
 
 <<dbRDA1a, warning=FALSE, echo = FALSE, message=FALSE, purl = TRUE, message = FALSE, fig.show='hide'>>=
