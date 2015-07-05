@@ -32,7 +32,7 @@ For this course we need a few extra packages.  Please install the following pack
 ```{R}
 install.packages(c("vegan", "rgl", "leaps", "car", "DAAG", "MuMIn", "relaimpo", 
                    "hier.part", "bootstrap", "MPV", "faraway", "nlme", "MASS", "ncf",
-                   "gstat", "spdep", "sp", "RCurl"), 
+                   "gstat", "spdep", "sp", "RCurl", "ggplot2"), 
                  dependencies = TRUE)
 ```
 
