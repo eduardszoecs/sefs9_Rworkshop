@@ -3,7 +3,7 @@
 ### Part 2: A (brief) introduction to ordination and the vegan package
 ### Written by Eduard Szöcs, 03.07.2015
 
-
+setwd("/home/edisz/Documents/Uni/Projects/PHD/CONFERENCES/SEFS9_Geneva/2-Ordination/data/")
 ### --------------
 ### Just a small function to reset the graphics window
 ### Written by Gavin Simpson
@@ -86,7 +86,7 @@ plot(PCA, scaling = 3)
 
 ## Create biplot with arrows. 
 ## Scaling 3 is symmetric scaling, all interpretations are approximates.
-biplot(PCA, cex = 5, scaling = 3)
+biplot(PCA, cex = 5, scaling = 1)
 
 
 
@@ -111,6 +111,7 @@ for (i in 1:5) {
 
 ### ----------
 ### Numerical summary output
+summary(PCA)
 summary(PCA, display = NULL, scaling = 3)
 
 ### ----------

@@ -136,7 +136,7 @@ knit_hooks$set(output = function(x, options) {
     \begin{tabular}{lccccc}
      & \multicolumn{1}{l}{\textbf{Raw data}} & \multicolumn{1}{l}{\textbf{Transformed data}} & \multicolumn{1}{l}{\textbf{Unimodal}} & \multicolumn{1}{l}{\textbf{Distance-based}} & \multicolumn{1}{l}{\textbf{Model-based}} \\ 
     \textbf{Unconstrained} & \cellcolor{green} PCA & tb-PCA & CA, DCA & \cellcolor{green} PCoA, NMDS & MM, LVM\\ 
-    \textbf{Constrained} & \cellcolor{green} RDA & \cellcolor{green} tb-RDA & CCA & db-RDA &  CAO, CQO\\ 
+    \textbf{Constrained} & \cellcolor{green} RDA & \cellcolor{green} tb-RDA & CCA & \cellcolor{green} db-RDA &  CAO, CQO\\ 
     \textbf{Other} & & & & Permanova, Dispersion & manyglm
     \end{tabular}
   }
